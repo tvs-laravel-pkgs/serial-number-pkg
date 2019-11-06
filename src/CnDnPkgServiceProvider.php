@@ -1,10 +1,10 @@
 <?php
 
-namespace Abs\SerialNumberPkg;
+namespace Abs\CnDnPkg;
 
 use Illuminate\Support\ServiceProvider;
 
-class SerialNumberPkgServiceProvider extends ServiceProvider {
+class CnDnPkgServiceProvider extends ServiceProvider {
 	/**
 	 * Register services.
 	 *
@@ -26,7 +26,6 @@ class SerialNumberPkgServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	public function boot() {
-		// $this->app->make('Abs\Basic\EntityController');
 		// $this->app->make('Abs\Basic\API\AuthController');
 	}
 }

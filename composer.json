@@ -1,6 +1,6 @@
 {
-    "name": "abs/serial-number-pkg",
-    "description": "For Serial Number Type, Serial Number Segment Masters",
+    "name": "abs/cn-dn-pkg",
+    "description": "For managing CN and DN invoices",
     "type": "library",
     "require":
     {},
@@ -17,7 +17,7 @@
         "laravel":
         {
             "providers": [
-                "Abs\\SerialNumberPkg\\SerialNumberPkgServiceProvider"
+                "Abs\\CnDnPkg\\CnDnPkgServiceProvider"
             ]
         }
     },
@@ -25,7 +25,7 @@
     {
         "psr-4":
         {
-            "Abs\\Tax\\": "src/"
+            "Abs\\CnDnPkg\\": "src/"
         }
     }
 }

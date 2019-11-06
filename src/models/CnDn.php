@@ -1,13 +1,13 @@
 <?php
 
-namespace Abs\SerialNumberPkg;
+namespace Abs\CnDnPkg;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SerialNumberSegment extends Model {
+class CnDn extends Model {
 	use SoftDeletes;
-	protected $table = 'serial_number_segments';
+	protected $table = 'cn_dns';
 	protected $fillable = [
 		'created_by_id',
 		'updated_by_id',
