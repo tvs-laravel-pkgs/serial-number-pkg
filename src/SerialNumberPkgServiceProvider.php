@@ -1,10 +1,10 @@
 <?php
 
-namespace Abs\CnDnPkg;
+namespace Abs\SerialNumberPkg;
 
 use Illuminate\Support\ServiceProvider;
 
-class CnDnPkgServiceProvider extends ServiceProvider {
+class SerialNumberPkgServiceProvider extends ServiceProvider {
 	/**
 	 * Register services.
 	 *

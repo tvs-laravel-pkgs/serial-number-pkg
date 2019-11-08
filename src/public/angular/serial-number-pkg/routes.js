@@ -13,7 +13,7 @@ app.config(['$routeProvider', function($routeProvider) {
     when('/serial-number-pkg/serial-number-type/edit/:id', {
         template: '<serial-number-type-form></serial-number-type-form>',
         title: 'Edit Serial Number Type',
-    })
+    }).
 
     //serial-number
     when('/serial-number-pkg/serial-number-segment/list', {
