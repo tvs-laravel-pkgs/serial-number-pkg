@@ -1,17 +1,14 @@
 <?php
 
-namespace Abs\CnDnPkg;
+namespace Abs\SerialNumberPkg;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CnDnItem extends Model {
+class SerialNumberType extends Model {
 	use SoftDeletes;
-	protected $table = 'cn_dn_items';
 	protected $fillable = [
+		'name',
 		'created_by_id',
-		'updated_by_id',
-		'deleted_by_id',
 	];
-
 }
