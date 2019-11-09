@@ -1,16 +1,15 @@
 <?php
 
-namespace Abs\CnDnPkg;
+namespace Abs\SerialNumberPkg;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CnDn extends Model {
+class SerialNumberCategory extends Model {
 	use SoftDeletes;
-	protected $table = 'cn_dns';
+	protected $table = 'serial_number_categories';
 	protected $fillable = [
+		'name',
 		'created_by_id',
-		'updated_by_id',
-		'deleted_by_id',
 	];
 }
