@@ -38,6 +38,7 @@ class SerialNumberType extends Migration {
 			$table->increments('id');
 			$table->unsignedInteger('company_id');
 			$table->string('name', 191);
+			$table->string('short_name', 191);
 			$table->unsignedInteger('created_by_id')->nullable();
 			$table->unsignedInteger('updated_by_id')->nullable();
 			$table->unsignedInteger('deleted_by_id')->nullable();
@@ -50,6 +51,7 @@ class SerialNumberType extends Migration {
 			$table->foreign('deleted_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
 
 			$table->unique(["company_id", "name"]);
+			$table->unique(["company_id", "short_name"]);
 		});
 
 	}
