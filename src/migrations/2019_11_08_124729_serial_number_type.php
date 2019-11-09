@@ -62,7 +62,7 @@ class SerialNumberType extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::dropIfExists('serial_number_caegories');
+		Schema::dropIfExists('serial_number_categories');
 		Schema::dropIfExists('financial_years');
 	}
 }
