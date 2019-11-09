@@ -31,8 +31,8 @@ app.component('serialNumberSegmentList', {
             columns: [
 
                 { data: 'action', class: 'action', name: 'action', searchable: false },
-                { data: 'name', name: 'name' },
-                { data: 'type', name: 'name' },
+                { data: 'name', name: 'serial_number_segments.name' },
+                { data: 'type', name: 'configs.name' },
                 { data: 'status', searchable: false },
             ],
             "infoCallback": function(settings, start, end, max, total, pre) {
@@ -46,8 +46,8 @@ app.component('serialNumberSegmentList', {
         $('#search_serial_number_segment').val(this.value);
 
         $scope.clear_search = function() {
-            $('#search_serial_number_type').val('');
-            $('#serial_number_type').DataTable().search('').draw();
+            $('#search_serial_number_segment').val('');
+            $('#serial_number_segment').DataTable().search('').draw();
         }
 
         var dataTables = $('#serial_number_segment').dataTable();
@@ -67,10 +67,10 @@ app.component('serialNumberSegmentList', {
                     new Noty({
                         type: 'success',
                         layout: 'topRight',
-                        text: 'Serial Number Type Deleted Successfully',
+                        text: 'Serial Number Segment Deleted Successfully',
                     }).show();
-                    $('#serial_number_type').DataTable().ajax.reload(function(json) {});
-                    $location.path('/serial-number-pkg/serial-number-type/list');
+                    $('#serial_number_segment').DataTable().ajax.reload(function(json) {});
+                    $location.path('/serial-number-pkg/serial-number-segment/list');
                 }
             });
         }
@@ -94,13 +94,28 @@ app.component('serialNumberSegmentForm', {
             self.type_list = response.data.type_list;
             self.action = response.data.action;
             if (response.data.action == 'Edit') {
-                if (response.data.serial_number_segment.deleted_at) {
-                    segment.switch_value = 'Inactive';
+                if (response.data.serial_number_segment[0].deleted_at) {
+                    console.log('trueI');
+                    self.serial_number_segment = [];
+                    self.serial_number_segment.push({
+                        id: response.data.serial_number_segment[0].id,
+                        name: response.data.serial_number_segment[0].name,
+                        data_type_id: response.data.serial_number_segment[0].data_type_id,
+                        switch_value: 'Inactive',
+                    });
                 } else {
-                    segment.switch_value = 'Active';
+                    console.log('trueA');
+                    self.serial_number_segment = [];
+                    self.serial_number_segment.push({
+                        id: response.data.serial_number_segment[0].id,
+                        name: response.data.serial_number_segment[0].name,
+                        data_type_id: response.data.serial_number_segment[0].data_type_id,
+                        switch_value: 'Active',
+                    });
                 }
+            } else {
+                $scope.add_segment();
             }
-            $scope.add_segment();
             $rootScope.loading = false;
         });
         //ADD SEGMENT
@@ -114,7 +129,7 @@ app.component('serialNumberSegmentForm', {
             console.log(index, segment_id);
             if (segment_id) {
                 self.segment_removal_id.push(segment_id);
-                $('#petty_cash_removal_id').val(JSON.stringify(self.segment_removal_id));
+                $('#segment_removal_id').val(JSON.stringify(self.segment_removal_id));
             }
             self.serial_number_segment.splice(index, 1);
         }
@@ -122,16 +137,11 @@ app.component('serialNumberSegmentForm', {
         var form_id = '#form';
         var v = jQuery(form_id).validate({
             ignore: '',
-            rules: {
-                'name': {
-                    required: true,
-                },
-            },
             submitHandler: function(form) {
                 let formData = new FormData($(form_id)[0]);
                 $('#submit').button('loading');
                 $.ajax({
-                        url: laravel_routes['saveSerialNumberType'],
+                        url: laravel_routes['saveSerialNumberSegment'],
                         method: "POST",
                         data: formData,
                         processData: false,
@@ -144,7 +154,7 @@ app.component('serialNumberSegmentForm', {
                                 layout: 'topRight',
                                 text: res.message,
                             }).show();
-                            $location.path('/serial-number-pkg/serial-number-type/list');
+                            $location.path('/serial-number-pkg/serial-number-segment/list');
                             $scope.$apply();
                         } else {
                             if (!res.success == true) {
@@ -160,7 +170,7 @@ app.component('serialNumberSegmentForm', {
                                 }).show();
                             } else {
                                 $('#submit').button('reset');
-                                $location.path('/serial-number-pkg/serial-number-type/list');
+                                $location.path('/serial-number-pkg/serial-number-segment/list');
                                 $scope.$apply();
                             }
                         }
