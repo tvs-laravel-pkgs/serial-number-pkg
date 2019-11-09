@@ -18,6 +18,7 @@ class SerialNumberGroupsC extends Migration {
 			$table->unsignedInteger('fy_id');
 			$table->unsignedInteger('state_id');
 			$table->unsignedInteger('branch_id');
+			$table->unsignedMediumInteger('length');
 			$table->unsignedInteger('starting_number');
 			$table->unsignedInteger('ending_number');
 			$table->unsignedInteger('next_number');
