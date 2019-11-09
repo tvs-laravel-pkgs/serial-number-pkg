@@ -1,0 +1,105 @@
+<!-- Content Wrap -->
+<div class="content-wrap">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div class="page-header-content-left">
+                <div class="page-header-content button-block">
+                    <a href="#!/serial-number-pkg/serial-number-type/list" type="button" class="btn-back btn-img"><img class="img-responsive" src="./public/theme/img/content/previous.svg" alt="Back" /></a>
+                </div><!-- Page Header Content -->
+                <div class="page-header-content title-block">
+                    <h1 class="title"><b>{{$ctrl.action}} Serial Number Segment</b></h1>
+                    <p class="subtitle">Serial Number Segment List / Form</p>
+                </div><!-- Page Header Content -->
+            </div><!-- Page Header Content Left -->
+        </div><!-- Page Header Inner -->
+    </div><!-- Page Header -->
+    <!-- Page Main Content -->
+    <div class="page-main-content form-content type2" style="padding: 0;">
+        <form id="form" autocomplete="off">
+            <input type="hidden" name="id" value="{{$ctrl.serial_number_type.id}}">
+            <div class="page-tab-form pb-70">
+                <div class="tab-form-wrap">
+                    <div class="tab-form-header">
+                        <div class="tab-header">
+                            <!-- Filters -->
+                            <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
+                                <ul class="nav nav-pills cndn-tabs">
+                                    <li class="active"><a class="filter active" data-target="#serial-number-segment" data-toggle="tab" aria-expanded="true">Serial Number Segment</a></li>
+                                </ul>
+                            </div><!-- Filters -->
+                        </div><!-- Tab Header -->
+                    </div><!-- Tab Form Header -->
+                    <div class="tab-form-body">
+                        <div class="tab-content">
+                            <!-- TAB PANEL -->
+                            <div class="tab-pane fade in active" id="serial-number-segment" data-animation="fadeInUp" data-animation-delay="300">
+                                <div class="tab-pane-wrap">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-8">
+                                            <div class="table-responsive">
+                                                <table class="table table-form">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Segment Name</th>
+                                                            <th>Segment Type</th>
+                                                            <th>Active Status</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="(index, segment) in $ctrl.serial_number_segment">
+                                                            <td>
+                                                                <input type="text" class="form-control type-sm" ng-model="segment.name" name="segment[{{index}}][name]" placeholder="Enter Segment Name" />
+                                                            </td>
+                                                            <td>
+                                                                <md-select ng-model="segment.data_type_id" placeholder="Select Travel Mode" data-md-container-class="selectdemoSelectHeader" data-provide="{{index}}" ng-change="getRatePerkm(petty_cash_local.travel_mode_id,index);petty_cash_local.to_km='';petty_cash_local.from_km='';petty_cash_local.amount=''">
+                                                                    <md-select-header class="demo-select-header ng-hide">
+                                                                        <input ng-model="searchTravel" type="search" placeholder="Search for a Travel Mode" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                                    </md-select-header>
+                                                                    <md-optgroup label="Travel List">
+                                                                        <md-option ng-value="type.id" ng-repeat="type in $ctrl.type_list | filter:searchTravel">{{type.name}}</md-option>
+                                                                    </md-optgroup>
+                                                                </md-select>
+                                                                <input type="hidden" name="segment[{{index}}][data_type_id]" value='{{segment.data_type_id}}' class="required data_type_id">
+                                                            </td>
+                                                            <td>
+                                                                <div class="tab-switch">
+                                                                    <md-switch ng-model="segment.switch_value" aria-label="Switch {{index}}" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn type-sm">
+                                                                        {{ segment.switch_value }}
+                                                                    </md-switch>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <a href="javascript:;" ng-click="removeSegment(index,segment.id)"><img class="img-responsive" src="./public/theme/img/table/cndn/delete.svg" alt="Delete" /></a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <button type="button" class="btn btn-primary-light btn-square" ng-click="add_segment()">+ Add Segments</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div><!-- Table Responsive -->
+                                        </div><!-- Column -->
+                                        <div class="tab-pane-footer">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <a href="#!/serial-number-pkg/serial-number-type/list" class="btn btn-primary">Cancel</a>
+                                                    <button type="button" class="btn btn-primary">Submit</button>
+                                                </div>
+                                            </div>
+                                        </div><!-- Tab Footer -->
+                                    </div><!-- Row -->
+                                </div><!-- Tab Pane Wrap -->
+                            </div><!-- Tabe Pane -->
+                        </div><!-- Tab Content -->
+                    </div><!-- Tab Form Body -->
+                </div><!-- Tab Form Wrap -->
+            </div><!-- Page Form -->
+        </form>
+    </div><!-- Page Main Content -->
+</div><!-- Content Wrap -->

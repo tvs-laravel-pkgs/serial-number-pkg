@@ -17,7 +17,7 @@ class SerialNumberGroupSerialNumberSegmentC extends Migration {
 			$table->string('value', 20)->nullable();
 			$table->unsignedMediumInteger('display_order')->default(9999);
 
-			$table->foreign('serial_number_type_id', 'sng_snt_u')->references('id')->on('serial_number_types')->onDelete('CASCADE')->onUpdate('cascade');
+			$table->foreign('serial_number_type_id', 'sng_snt_u')->references('id')->on('serial_number_categories')->onDelete('CASCADE')->onUpdate('cascade');
 			$table->foreign('segment_id', 'sng_su')->references('id')->on('serial_number_segments')->onDelete('CASCADE')->onUpdate('cascade');
 
 			$table->unique(["serial_number_type_id", "segment_id"], 'sngsns_unique');
