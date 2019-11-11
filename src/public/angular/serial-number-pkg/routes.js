@@ -24,7 +24,7 @@ app.config(['$routeProvider', function($routeProvider) {
         template: '<serial-number-segment-form></serial-number-segment-form>',
         title: 'Add Serial Number Segment',
     }).
-    when('/serial-number-pkg/serial-number/edit/:id', {
+    when('/serial-number-pkg/serial-number-segment/edit/:id', {
         template: '<serial-number-segment-form></serial-number-segment-form>',
         title: 'Edit Serial Number Segment',
     });
