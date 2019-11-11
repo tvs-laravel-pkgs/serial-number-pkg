@@ -3,6 +3,7 @@
 namespace Abs\SerialNumberPkg;
 use App\Company;
 use App\Config;
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -13,6 +14,10 @@ class SerialNumberSegment extends Model {
 		'data_type_id',
 		'created_by_id',
 	];
+
+	public static function getSegmentList() {
+		return SerialNumberSegment::select('name', 'id')->where('company_id', Auth::user()->company_id)->get();
+	}
 
 	public static function createFromCollection($records) {
 		foreach ($records as $key => $record_data) {

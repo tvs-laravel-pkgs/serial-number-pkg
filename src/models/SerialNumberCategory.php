@@ -2,6 +2,7 @@
 
 namespace Abs\SerialNumberPkg;
 use App\Company;
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -12,6 +13,10 @@ class SerialNumberCategory extends Model {
 		'name',
 		'created_by_id',
 	];
+
+	public static function getCategoryList() {
+		return SerialNumberCategory::select('name', 'id')->where('company_id', Auth::user()->company_id)->get();
+	}
 
 	public static function createFromCollection($records) {
 		foreach ($records as $key => $record_data) {

@@ -33,17 +33,15 @@ app.component('serialNumberGroupList', {
             },
 
             columns: [
-
                 { data: 'action', class: 'action', name: 'action', searchable: false },
-                { data: 'type', name: 'configs.name' },
-                { data: 'financialyear', name: 'financialyear' },
-                { data: 'state', name: 'state' },
-                { data: 'branch', name: 'branch' },
-                { data: 'start_no', name: 'starting_number' },
-                { data: 'end_no', name: 'ending_number' },
-                { data: 'next_no', name: 'next_number' },
-                { data: 'segment', name: 'segment' },
-                // { data: 'status', searchable: false },
+                { data: 'name', name: 'serial_number_categories.name' },
+                { data: 'finance_year', name: 'financial_years.name', searchable: false },
+                { data: 'state', name: 'states.name' },
+                { data: 'branch', name: 'outlets.name' },
+                { data: 'starting_number', name: 'starting_number' },
+                { data: 'ending_number', name: 'ending_number' },
+                { data: 'next_number', name: 'next_number' },
+                { data: 'segment', name: 'segment', searchable: false },
             ],
             "infoCallback": function(settings, start, end, max, total, pre) {
                 $('#table_info').html('(' + max + ')')
@@ -101,45 +99,73 @@ app.component('serialNumberGroupForm', {
         ).then(function(response) {
             console.log(response);
             self.serial_number_group = response.data.serial_number_group;
+            self.category_list = response.data.category_list;
             self.type_list = response.data.type_list;
             self.state_list = response.data.state_list;
+            self.financial_year_list = response.data.financial_year_list;
             self.action = response.data.action;
+            self.serial_number_group.segments = [];
             if (response.data.action == 'Edit') {
-
+                self.branch_list = response.data.branch_list;
+                if (self.serial_number_group.deleted_at) {
+                    self.switch_value = 'Inactive';
+                } else {
+                    self.switch_value = 'Active';
+                }
             } else {
+                $scope.add_group();
                 self.switch_value = 'Active';
             }
             $rootScope.loading = false;
         });
 
+        /* Tab Funtion */
+        $('.btn-nxt').on("click", function() {
+            $('.cndn-tabs li.active').next().children('a').trigger("click");
+            tabPaneFooter();
+        });
+        $('.btn-prev').on("click", function() {
+            $('.cndn-tabs li.active').prev().children('a').trigger("click");
+            tabPaneFooter();
+        });
+        $('.btn-pills').on("click", function() {
+            tabPaneFooter();
+        });
+        $scope.btnNxt = function() {}
+        $scope.prev = function() {}
+
         //SHOW BRANCH BASED STATE
         $scope.onSelectedState = function($id) {
-            alert($id);
             $http.get(
                 get_branch_based_state_url + '/' + $id
             ).then(function(response) {
-
+                console.log(response);
+                self.branch_list = response.data.branch_list;
             });
         }
         //ADD SEGMENT
-        $scope.add_segment = function() {
-            self.serial_number_segment.push({
-                switch_value: 'Active',
-            });
+        $scope.add_group = function() {
+            self.serial_number_group.segments.push({});
         }
         //REMOVE SEGMENT 
-        $scope.removeSegment = function(index, segment_id) {
-            console.log(index, segment_id);
-            if (segment_id) {
-                self.segment_removal_id.push(segment_id);
-                $('#segment_removal_id').val(JSON.stringify(self.segment_removal_id));
-            }
-            self.serial_number_segment.splice(index, 1);
+        $scope.removeGroup = function(index) {
+            // if (segment_id) {
+            //     self.segment_removal_id.push(segment_id);
+            //     $('#segment_removal_id').val(JSON.stringify(self.segment_removal_id));
+            // }
+            self.serial_number_group.segments.splice(index, 1);
         }
 
         var form_id = '#form';
         var v = jQuery(form_id).validate({
             ignore: '',
+            invalidHandler: function(event, validator) {
+                new Noty({
+                    type: 'error',
+                    layout: 'topRight',
+                    text: 'Check all tabs for errors'
+                }).show();
+            },
             submitHandler: function(form) {
                 let formData = new FormData($(form_id)[0]);
                 $('#submit').button('loading');

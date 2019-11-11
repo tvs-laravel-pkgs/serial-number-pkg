@@ -11,13 +11,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class SerialNumberGroup extends Model {
 	use SoftDeletes;
 	protected $fillable = [
-		'name',
-		'data_type_id',
+		'company_id',
+		'category_id',
+		'fy_id',
+		'state_id',
+		'branch_id',
+		'length',
+		'starting_number',
+		'ending_number',
+		'next_number',
 		'created_by_id',
 	];
 
 	public function segments() {
-		return $this->belongsToMany('Abs\SerialNumberPkg\SerialNumberSegment', 'serial_number_group_serial_number_segment', 'serial_number_group_id', 'segment_id');
+		return $this->belongsToMany('Abs\SerialNumberPkg\SerialNumberSegment', 'serial_number_group_serial_number_segment', 'serial_number_group_id', 'segment_id')->withPivot(['value', 'display_order']);
 	}
 
 	public static function createFromCollection($records) {

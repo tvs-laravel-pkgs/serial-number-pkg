@@ -99,7 +99,6 @@ app.component('serialNumberSegmentForm', {
             self.action = response.data.action;
             if (response.data.action == 'Edit') {
                 if (response.data.serial_number_segment[0].deleted_at) {
-                    console.log('trueI');
                     self.serial_number_segment = [];
                     self.serial_number_segment.push({
                         id: response.data.serial_number_segment[0].id,
@@ -108,7 +107,6 @@ app.component('serialNumberSegmentForm', {
                         switch_value: 'Inactive',
                     });
                 } else {
-                    console.log('trueA');
                     self.serial_number_segment = [];
                     self.serial_number_segment.push({
                         id: response.data.serial_number_segment[0].id,
