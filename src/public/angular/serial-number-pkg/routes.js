@@ -15,7 +15,7 @@ app.config(['$routeProvider', function($routeProvider) {
         title: 'Edit Serial Number Type',
     }).
 
-    //serial-number
+    //SERIAL NUMBER SEGMENT
     when('/serial-number-pkg/serial-number-segment/list', {
         template: '<serial-number-segment-list></serial-number-segment-list>',
         title: 'Serial Number Segments',
@@ -27,5 +27,19 @@ app.config(['$routeProvider', function($routeProvider) {
     when('/serial-number-pkg/serial-number-segment/edit/:id', {
         template: '<serial-number-segment-form></serial-number-segment-form>',
         title: 'Edit Serial Number Segment',
+    }).
+
+    //SERIAL NUMBER GROUP
+    when('/serial-number-pkg/serial-number-group/list', {
+        template: '<serial-number-group-list></serial-number-group-list>',
+        title: 'Serial Number Groups',
+    }).
+    when('/serial-number-pkg/serial-number-group/add', {
+        template: '<serial-number-group-form></serial-number-group-form>',
+        title: 'Add Serial Number Group',
+    }).
+    when('/serial-number-pkg/serial-number-group/edit/:id', {
+        template: '<serial-number-group-form></serial-number-group-form>',
+        title: 'Edit Serial Number Group',
     });
 }]);

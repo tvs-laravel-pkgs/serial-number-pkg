@@ -1,0 +1,215 @@
+<!-- Content Wrap -->
+<div class="content-wrap cndn-wrap">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div class="page-header-content-left">
+                <div class="page-header-content button-block">
+                    <a href="#!/serial-number-pkg/serial-number-group/list" type="button" class="btn-back btn-img"><img class="img-responsive" src="./public/theme/img/content/previous.svg" alt="Back" /></a>
+                </div><!-- Page Header Content -->
+                <div class="page-header-content title-block">
+                    <h1 class="title"><b>{{$ctrl.action}} Serial Number Group</b></h1>
+                    <p class="subtitle">Serial Number Group List / Form</p>
+                </div><!-- Page Header Content -->
+            </div><!-- Page Header Content Left -->
+        </div><!-- Page Header Inner -->
+    </div><!-- Page Header -->
+    <!-- Page Main Content -->
+    <div class="page-main-content form-content type2">
+        <div class="page-tab-form pb-70">
+            <div class="tab-form-wrap">
+                <div class="tab-form-header">
+                    <div class="tab-header">
+                        <!-- Filters -->
+                        <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
+                            <ul class="nav nav-pills cndn-tabs">
+                                <li class="active"><a class="filter active" data-target="#serial-number-group" data-toggle="tab" aria-expanded="true">Serial Number Group</a></li>
+                                <li><a data-target="#segments" data-toggle="tab" aria-expanded="true" class="filter">Segments</a></li>
+                            </ul>
+                        </div><!-- Filters -->
+                    </div><!-- Tab Header -->
+                </div><!-- Tab Form Header -->
+                <div class="tab-form-body">
+                    <div class="tab-content">
+                        <!-- TAB PANEL -->
+                        <div class="tab-pane fade in active" id="serial-number-group" data-animation="fadeInUp" data-animation-delay="300">
+                            <div class="tab-pane-wrap">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="input-text form-group">
+                                            <label>Type <sup class="mandatory">*</sup></label>
+                                            <md-select ng-model="data_type_id" placeholder="Select Type" data-md-container-class="selectdemoSelectHeader">
+                                                <md-select-header class="demo-select-header ng-hide">
+                                                    <input ng-model="searchType" type="search" placeholder="Search for a Segment Type" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                </md-select-header>
+                                                <md-optgroup label="Travel List">
+                                                    <md-option ng-value="type.id" ng-repeat="type in $ctrl.type_list | filter:searchTravel">{{type.name}}</md-option>
+                                                </md-optgroup>
+                                            </md-select>
+                                            <input type="hidden" name="data_type_id" value='{{data_type_id}}' class="required">
+                                        </div><!-- Feild -->
+                                    </div><!-- Column -->
+                                    <div class="col-md-3">
+                                        <div class="input-text form-group">
+                                            <label>Financial Year <sup class="mandatory">*</sup></label>
+                                            <md-select ng-model="segment.data_type_id" placeholder="Select Segment Type" data-md-container-class="selectdemoSelectHeader">
+                                                <md-select-header class="demo-select-header ng-hide">
+                                                    <input ng-model="searchType" type="search" placeholder="Search for a Segment Type" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                </md-select-header>
+                                                <md-optgroup label="Travel List">
+                                                    <md-option ng-value="type.id" ng-repeat="type in $ctrl.type_list | filter:searchTravel">{{type.name}}</md-option>
+                                                </md-optgroup>
+                                            </md-select>
+                                            <input type="hidden" name="segment[{{index}}][data_type_id]" value='{{segment.data_type_id}}' class="required data_type_id">
+                                        </div><!-- Feild -->
+                                    </div><!-- Column -->
+                                    <div class="col-md-3">
+                                        <div class="input-text form-group">
+                                            <label>State <sup class="mandatory">*</sup></label>
+                                            <md-select ng-model="state.id" placeholder="Select State" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedState(state.id)">
+                                                <md-select-header class="demo-select-header ng-hide">
+                                                    <input ng-model="searchType" type="search" placeholder="Search for a Segment Type" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                </md-select-header>
+                                                <md-optgroup label="Travel List">
+                                                    <md-option ng-value="state.id" ng-repeat="state in $ctrl.state_list | filter:searchTravel">{{state.name}}</md-option>
+                                                </md-optgroup>
+                                            </md-select>
+                                            <input type="hidden" name="state_id" value='{{state.id}}' class="required">
+                                        </div><!-- Feild -->
+                                    </div><!-- Column -->
+                                    <div class="col-md-3">
+                                        <div class="input-text form-group">
+                                            <label>Branch <sup class="mandatory">*</sup></label>
+                                            <md-select ng-model="segment.data_type_id" placeholder="Select Segment Type" data-md-container-class="selectdemoSelectHeader">
+                                                <md-select-header class="demo-select-header ng-hide">
+                                                    <input ng-model="searchType" type="search" placeholder="Search for a Segment Type" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                </md-select-header>
+                                                <md-optgroup label="Travel List">
+                                                    <md-option ng-value="type.id" ng-repeat="type in $ctrl.type_list | filter:searchTravel">{{type.name}}</md-option>
+                                                </md-optgroup>
+                                            </md-select>
+                                            <input type="hidden" name="segment[{{index}}][data_type_id]" value='{{segment.data_type_id}}' class="required data_type_id">
+                                        </div><!-- Feild -->
+                                    </div><!-- Column -->
+                                </div><!-- Row -->
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="input-text form-group">
+                                            <label>Starting Number <sup class="mandatory">*</sup></label>
+                                            <input type="text" class="form-control type-sm required" ng-model="starting_number" name="starting_number" placeholder="Enter Starting Number" />
+                                        </div><!-- Feild -->
+                                    </div><!-- Column -->
+                                    <div class="col-md-3">
+                                        <div class="input-text form-group">
+                                            <label>Ending Number <sup class="mandatory">*</sup></label>
+                                            <input type="text" class="form-control type-sm required" ng-model="ending_number" name="ending_number" placeholder="Enter Ending Number" />
+                                        </div><!-- Feild -->
+                                    </div><!-- Column -->
+                                    <div class="col-md-3">
+                                        <div class="input-text form-group">
+                                            <label>Length <sup class="mandatory">*</sup></label>
+                                            <input type="text" class="form-control type-sm required" ng-model="length" name="length" placeholder="Enter Length" />
+                                        </div><!-- Feild -->
+                                    </div><!-- Column -->
+                                    <div class="col-md-3">
+                                        <div class="input-text form-group">
+                                            <label>Next Number<sup class="mandatory">*</sup></label>
+                                            <input type="text" class="form-control type-sm required" ng-model="next" name="next" placeholder="Enter Next" />
+                                        </div><!-- Feild -->
+                                    </div><!-- Column -->
+                                </div><!-- Row -->
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Status<sup class="mandatory">*</sup></label>
+                                        <div class="tab-switch">
+                                            <md-switch ng-model="$ctrl.switch_value" aria-label="Switch 1" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn type-sm">
+                                                {{ $ctrl.switch_value }}
+                                            </md-switch>
+                                            <input type="hidden" name="status" value="{{$ctrl.switch_value}}">
+                                        </div>
+                                    </div><!-- Column -->
+                                </div><!-- Row -->
+                                <div class="tab-pane-footer">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a class="btn btn-primary btn-nxt">Next</a>
+                                        </div>
+                                    </div>
+                                </div><!-- Tab Footer -->
+                            </div><!-- Row -->
+                        </div><!-- Tab Pane Wrap -->
+                    </div><!-- Tabe Pane -->
+                    <div class="tab-pane fade" id="segments" data-animation="fadeInUp" data-animation-delay="300">
+                        <div class="tab-pane-wrap">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-8">
+                                    <h6 class="tab-pane-title">Serial Number Group : <span class="color-primary-light">Free Text Invoice</span></h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-form">
+                                            <thead>
+                                                <tr>
+                                                    <th>Segment</th>
+                                                    <th>Value</th>
+                                                    <th>Display Order</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <input type="text" class="form-control type-sm" placeholder="Enter Sub Category" />
+                                                    </td>
+                                                    <td>
+                                                        <div class="tab-switch">
+                                                            <md-switch ng-model="$ctrl.switch_value" aria-label="Switch 1" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn type-sm">
+                                                                {{ $ctrl.switch_value }}
+                                                            </md-switch>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <img class="img-responsive" src="./public/theme/img/table/cndn/delete.svg" alt="Delete" />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <input type="text" class="form-control type-sm" placeholder="Enter Sub Category" />
+                                                    </td>
+                                                    <td>
+                                                        <div class="tab-switch">
+                                                            <md-switch ng-model="$ctrl.switch_value" aria-label="Switch 1" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn type-sm">
+                                                                {{ $ctrl.switch_value }}
+                                                            </md-switch>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <img class="img-responsive" src="./public/theme/img/table/cndn/delete.svg" alt="Delete" />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <button type="button" class="btn btn-primary-light btn-square">+ Add Sub Category</button>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div><!-- Table Responsive -->
+                                </div><!-- Column -->
+                                <div class="tab-pane-footer">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a class="btn btn-secondary btn-prev">Previous</a>
+                                            <button type="button" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+                                </div><!-- Tab Footer -->
+                            </div><!-- Row -->
+                        </div><!-- Tab Pane Wrap -->
+                    </div><!-- Tabe Pane -->
+                </div><!-- Tab Content -->
+            </div><!-- Tab Form Body -->
+        </div><!-- Tab Form Wrap -->
+    </div><!-- Page Form -->
+</div><!-- Page Main Content -->
+</div><!-- Content Wrap -->

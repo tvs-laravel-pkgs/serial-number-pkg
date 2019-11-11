@@ -1,9 +1,10 @@
 <?php
 
 namespace Abs\SerialNumberPkg;
-use Abs\SerialNumberPkg\SerialNumberSegment;
+use Abs\SerialNumberPkg\SerialNumberGroup;
 use App\Config;
 use App\Http\Controllers\Controller;
+use App\State;
 use Auth;
 use Carbon\Carbon;
 use DB;
@@ -11,13 +12,13 @@ use Illuminate\Http\Request;
 use Validator;
 use Yajra\Datatables\Datatables;
 
-class SerialNumberSegmentController extends Controller {
+class SerialNumberGroupController extends Controller {
 
 	public function __construct() {
 	}
 
-	public function getSerialNumberSegmentList() {
-		$serial_number_segment_list = SerialNumberSegment::withTrashed()
+	public function getSerialNumberGroupList() {
+		$serial_number_group_list = SerialNumberGroup::withTrashed()
 			->select(
 				'serial_number_segments.id',
 				'serial_number_segments.name as name',
@@ -28,20 +29,20 @@ class SerialNumberSegmentController extends Controller {
 			->where('serial_number_segments.company_id', Auth::user()->company_id)
 			->orderby('serial_number_segments.id', 'desc');
 
-		return Datatables::of($serial_number_segment_list)
-			->addColumn('name', function ($serial_number_segment_list) {
-				$status = $serial_number_segment_list->status == 'Active' ? 'green' : 'red';
-				return '<span class="status-indicator ' . $status . '"></span>' . $serial_number_segment_list->name;
+		return Datatables::of($serial_number_group_list)
+			->addColumn('name', function ($serial_number_group_list) {
+				$status = $serial_number_group_list->status == 'Active' ? 'green' : 'red';
+				return '<span class="status-indicator ' . $status . '"></span>' . $serial_number_group_list->name;
 			})
-			->addColumn('action', function ($serial_number_segment_list) {
+			->addColumn('action', function ($serial_number_group_list) {
 				$edit_img = asset('public/theme/img/table/cndn/edit.svg');
 				$delete_img = asset('public/theme/img/table/cndn/delete.svg');
 				return '
-					<a href="#!/serial-number-pkg/serial-number-segment/edit/' . $serial_number_segment_list->id . '">
+					<a href="#!/serial-number-pkg/serial-number-group/edit/' . $serial_number_group_list->id . '">
 						<img src="' . $edit_img . '" alt="View" class="img-responsive">
 					</a>
-					<a href="javascript:;" data-toggle="modal" data-target="#delete_serial_number_segment"
-					onclick="angular.element(this).scope().deleteSerialNumberType(' . $serial_number_segment_list->id . ')" dusk = "delete-btn" title="Delete">
+					<a href="javascript:;" data-toggle="modal" data-target="#delete_serial_number_group"
+					onclick="angular.element(this).scope().deleteSerialNumberType(' . $serial_number_group_list->id . ')" dusk = "delete-btn" title="Delete">
 					<img src="' . $delete_img . '" alt="delete" class="img-responsive">
 					</a>
 					';
@@ -49,23 +50,24 @@ class SerialNumberSegmentController extends Controller {
 			->make(true);
 	}
 
-	public function getSerialNumberSegmentForm($id = NULL) {
+	public function getSerialNumberGroupForm($id = NULL) {
 		if (!$id) {
-			$serial_number_segment = new SerialNumberSegment;
+			$serial_number_group = new SerialNumberGroup;
 			$action = 'Add';
 		} else {
-			$serial_number_segment = SerialNumberSegment::withTrashed()
+			$serial_number_group = SerialNumberGroup::withTrashed()
 				->where('id', $id)->get();
 			$action = 'Edit';
 		}
 		$this->data['type_list'] = Config::getSegmentTypeList();
-		$this->data['serial_number_segment'] = $serial_number_segment;
+		$this->data['state_list'] = State::getStateList();
+		$this->data['serial_number_group'] = $serial_number_group;
 		$this->data['action'] = $action;
 
 		return response()->json($this->data);
 	}
 
-	public function saveSerialNumberSegment(Request $request) {
+	public function saveSerialNumber(Request $request) {
 		// dd($request->all());
 		try {
 			if (!empty($request->segment)) {

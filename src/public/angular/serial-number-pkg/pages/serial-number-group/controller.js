@@ -1,12 +1,12 @@
-app.component('serialNumberSegmentList', {
-    templateUrl: serial_number_segment_list_template_url,
+app.component('serialNumberGroupList', {
+    templateUrl: serial_number_group_list_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location) {
         $scope.loading = true;
         var self = this;
         self.hasPermission = HelperService.hasPermission;
         var table_scroll;
         table_scroll = $('.page-main-content').height() - 37;
-        var dataTable = $('#serial_number_segment').DataTable({
+        var dataTable = $('#serial_number_group').DataTable({
             "dom": cndn_dom_structure,
             "language": {
                 "search": "",
@@ -26,7 +26,7 @@ app.component('serialNumberSegmentList', {
             scrollY: table_scroll + "px",
             scrollCollapse: true,
             ajax: {
-                url: laravel_routes['getSerialNumberSegmentList'],
+                url: laravel_routes['getSerialNumberGroupList'],
                 type: "GET",
                 dataType: "json",
                 data: function(d) {},
@@ -35,8 +35,14 @@ app.component('serialNumberSegmentList', {
             columns: [
 
                 { data: 'action', class: 'action', name: 'action', searchable: false },
-                { data: 'name', name: 'serial_number_segments.name' },
                 { data: 'type', name: 'configs.name' },
+                { data: 'financialyear', name: 'financialyear' },
+                { data: 'state', name: 'state' },
+                { data: 'branch', name: 'branch' },
+                { data: 'start_no', name: 'starting_number' },
+                { data: 'end_no', name: 'ending_number' },
+                { data: 'next_no', name: 'next_number' },
+                { data: 'segment', name: 'segment' },
                 // { data: 'status', searchable: false },
             ],
             "infoCallback": function(settings, start, end, max, total, pre) {
@@ -47,34 +53,34 @@ app.component('serialNumberSegmentList', {
             }
         });
         $('.dataTables_length select').select2();
-        $('#search_serial_number_segment').val(this.value);
+        $('#search_serial_number_group').val(this.value);
 
         $scope.clear_search = function() {
-            $('#search_serial_number_segment').val('');
-            $('#serial_number_segment').DataTable().search('').draw();
+            $('#search_serial_number_group').val('');
+            $('#serial_number_group').DataTable().search('').draw();
         }
 
-        var dataTables = $('#serial_number_segment').dataTable();
-        $("#search_serial_number_segment").keyup(function() {
+        var dataTables = $('#serial_number_group').dataTable();
+        $("#search_serial_number_group").keyup(function() {
             dataTables.fnFilter(this.value);
         });
 
         $scope.deleteSerialNumberType = function($id) {
-            $('#serial_number_segment_id').val($id);
+            $('#serial_number_group_id').val($id);
         }
         $scope.deleteConfirm = function() {
-            $id = $('#serial_number_segment_id').val();
+            $id = $('#serial_number_group_id').val();
             $http.get(
-                serial_number_segment_delete_data_url + '/' + $id,
+                serial_number_group_delete_data_url + '/' + $id,
             ).then(function(response) {
                 if (response.data.success) {
                     new Noty({
                         type: 'success',
                         layout: 'topRight',
-                        text: 'Serial Number Segment Deleted Successfully',
+                        text: 'Serial Number Group Deleted Successfully',
                     }).show();
-                    $('#serial_number_segment').DataTable().ajax.reload(function(json) {});
-                    $location.path('/serial-number-pkg/serial-number-segment/list');
+                    $('#serial_number_group').DataTable().ajax.reload(function(json) {});
+                    $location.path('/serial-number-pkg/serial-number-group/list');
                 }
             });
         }
@@ -83,10 +89,10 @@ app.component('serialNumberSegmentList', {
 });
 //------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------
-app.component('serialNumberSegmentForm', {
-    templateUrl: serial_number_segment_form_template_url,
+app.component('serialNumberGroupForm', {
+    templateUrl: serial_number_group_form_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope) {
-        get_form_data_url = typeof($routeParams.id) == 'undefined' ? serial_number_segment_get_form_data_url : serial_number_segment_get_form_data_url + '/' + $routeParams.id;
+        get_form_data_url = typeof($routeParams.id) == 'undefined' ? serial_number_group_get_form_data_url : serial_number_group_get_form_data_url + '/' + $routeParams.id;
         var self = this;
         self.hasPermission = HelperService.hasPermission;
         self.angular_routes = angular_routes;
@@ -94,34 +100,27 @@ app.component('serialNumberSegmentForm', {
             get_form_data_url
         ).then(function(response) {
             console.log(response);
-            self.serial_number_segment = response.data.serial_number_segment;
+            self.serial_number_group = response.data.serial_number_group;
             self.type_list = response.data.type_list;
+            self.state_list = response.data.state_list;
             self.action = response.data.action;
             if (response.data.action == 'Edit') {
-                if (response.data.serial_number_segment[0].deleted_at) {
-                    console.log('trueI');
-                    self.serial_number_segment = [];
-                    self.serial_number_segment.push({
-                        id: response.data.serial_number_segment[0].id,
-                        name: response.data.serial_number_segment[0].name,
-                        data_type_id: response.data.serial_number_segment[0].data_type_id,
-                        switch_value: 'Inactive',
-                    });
-                } else {
-                    console.log('trueA');
-                    self.serial_number_segment = [];
-                    self.serial_number_segment.push({
-                        id: response.data.serial_number_segment[0].id,
-                        name: response.data.serial_number_segment[0].name,
-                        data_type_id: response.data.serial_number_segment[0].data_type_id,
-                        switch_value: 'Active',
-                    });
-                }
+
             } else {
-                $scope.add_segment();
+                self.switch_value = 'Active';
             }
             $rootScope.loading = false;
         });
+
+        //SHOW BRANCH BASED STATE
+        $scope.onSelectedState = function($id) {
+            alert($id);
+            $http.get(
+                get_branch_based_state_url + '/' + $id
+            ).then(function(response) {
+
+            });
+        }
         //ADD SEGMENT
         $scope.add_segment = function() {
             self.serial_number_segment.push({
@@ -145,7 +144,7 @@ app.component('serialNumberSegmentForm', {
                 let formData = new FormData($(form_id)[0]);
                 $('#submit').button('loading');
                 $.ajax({
-                        url: laravel_routes['saveSerialNumberSegment'],
+                        url: laravel_routes['saveSerialNumberGroup'],
                         method: "POST",
                         data: formData,
                         processData: false,
@@ -158,7 +157,7 @@ app.component('serialNumberSegmentForm', {
                                 layout: 'topRight',
                                 text: res.message,
                             }).show();
-                            $location.path('/serial-number-pkg/serial-number-segment/list');
+                            $location.path('/serial-number-pkg/serial-number-group/list');
                             $scope.$apply();
                         } else {
                             if (!res.success == true) {
@@ -174,7 +173,7 @@ app.component('serialNumberSegmentForm', {
                                 }).show();
                             } else {
                                 $('#submit').button('reset');
-                                $location.path('/serial-number-pkg/serial-number-segment/list');
+                                $location.path('/serial-number-pkg/serial-number-group/list');
                                 $scope.$apply();
                             }
                         }
