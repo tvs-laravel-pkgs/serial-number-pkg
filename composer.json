@@ -1,6 +1,6 @@
 {
-    "name": "abs/cn-dn-pkg",
-    "description": "For managing CN and DN invoices",
+    "name": "abs/serial-number-pkg",
+    "description": "For generating serial number",
     "type": "library",
     "require":
     {},
@@ -17,7 +17,7 @@
         "laravel":
         {
             "providers": [
-                "Abs\\CnDnPkg\\CnDnPkgServiceProvider"
+                "Abs\\SerialNumberPkg\\SerialNumberPkgServiceProvider"
             ]
         }
     },
@@ -25,7 +25,7 @@
     {
         "psr-4":
         {
-            "Abs\\CnDnPkg\\": "src/"
+            "Abs\\SerialNumberPkg\\": "src/"
         }
     }
 }
