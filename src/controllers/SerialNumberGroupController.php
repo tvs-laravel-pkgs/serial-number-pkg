@@ -97,11 +97,11 @@ class SerialNumberGroupController extends Controller {
 			$error_messages = [
 				'category_id.required' => 'Category Name is Required',
 				'category_id.unique' => 'Category Name is already taken',
-				'fy_id.required' => 'Fincncial Year is Required',
+				// 'fy_id.required' => 'Fincncial Year is Required',
 				'fy_id.unique' => 'Fincncial Year is already taken',
-				'state_id.required' => 'State Name is Required',
+				// 'state_id.required' => 'State Name is Required',
 				'state_id.unique' => 'State Name is already taken',
-				'branch_id.required' => 'Branch Name is Required',
+				// 'branch_id.required' => 'Branch Name is Required',
 				'branch_id.unique' => 'Branch Name is already taken',
 				'starting_number.required' => 'Starting Number is Required',
 				'ending_number.required' => 'Ending Number is Required',
@@ -114,15 +114,15 @@ class SerialNumberGroupController extends Controller {
 					'unique:serial_number_groups,category_id,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',fy_id,' . $request->fy_id . ',state_id,' . $request->state_id . ',branch_id,' . $request->branch_id,
 				],
 				'fy_id' => [
-					'required',
+					// 'required',
 					'unique:serial_number_groups,fy_id,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',category_id,' . $request->category_id . ',state_id,' . $request->state_id . ',branch_id,' . $request->branch_id,
 				],
 				'state_id' => [
-					'required',
+					// 'required',
 					'unique:serial_number_groups,state_id,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',category_id,' . $request->category_id . ',fy_id,' . $request->fy_id . ',branch_id,' . $request->branch_id,
 				],
 				'branch_id' => [
-					'required',
+					// 'required',
 					'unique:serial_number_groups,branch_id,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',category_id,' . $request->category_id . ',state_id,' . $request->state_id . ',fy_id,' . $request->fy_id,
 				],
 				'starting_number' => 'required',

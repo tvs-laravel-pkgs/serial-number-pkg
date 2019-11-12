@@ -62,7 +62,7 @@
                                                         <md-option ng-value="finance.id" ng-repeat="finance in $ctrl.financial_year_list | filter:searchTravel">{{finance.code}}</md-option>
                                                     </md-optgroup>
                                                 </md-select>
-                                                <input type="hidden" name="fy_id" value='{{$ctrl.serial_number_group.fy_id}}' class="required">
+                                                <input type="hidden" name="fy_id" value='{{$ctrl.serial_number_group.fy_id}}' class="">
                                             </div><!-- Feild -->
                                         </div><!-- Column -->
                                         <div class="col-md-3">
@@ -76,7 +76,7 @@
                                                         <md-option ng-value="state.id" ng-repeat="state in $ctrl.state_list | filter:searchTravel">{{state.name}}</md-option>
                                                     </md-optgroup>
                                                 </md-select>
-                                                <input type="hidden" name="state_id" value='{{$ctrl.serial_number_group.state_id}}' class="required">
+                                                <input type="hidden" name="state_id" value='{{$ctrl.serial_number_group.state_id}}' class="">
                                             </div><!-- Feild -->
                                         </div><!-- Column -->
                                         <div class="col-md-3">
@@ -90,7 +90,7 @@
                                                         <md-option ng-value="outlet.id" ng-repeat="outlet in $ctrl.branch_list | filter:searchTravel">{{outlet.name}}</md-option>
                                                     </md-optgroup>
                                                 </md-select>
-                                                <input type="hidden" name="branch_id" value='{{$ctrl.serial_number_group.branch_id}}' class="required">
+                                                <input type="hidden" name="branch_id" value='{{$ctrl.serial_number_group.branch_id}}' class="">
                                             </div><!-- Feild -->
                                         </div><!-- Column -->
                                         <div class="col-md-3">
@@ -141,7 +141,7 @@
                             <div class="tab-pane fade" id="segments" data-animation="fadeInUp" data-animation-delay="300">
                                 <div class="tab-pane-wrap">
                                     <div class="row">
-                                        <div class="col-lg-6 col-md-8">
+                                        <div class="col-lg-8 col-md-10">
                                             <h6 class="tab-pane-title">Serial Number Group : <span class="color-primary-light">Free Text Invoice</span></h6>
                                             <div class="table-responsive">
                                                 <table class="table table-form">
