@@ -92,6 +92,7 @@ class SerialNumberGroupController extends Controller {
 	}
 
 	public function saveSerialNumberGroup(Request $request) {
+		// dd($request->all());
 		try {
 			$error_messages = [
 				'category_id.required' => 'Category Name is Required',
@@ -102,6 +103,10 @@ class SerialNumberGroupController extends Controller {
 				'state_id.unique' => 'State Name is already taken',
 				'branch_id.required' => 'Branch Name is Required',
 				'branch_id.unique' => 'Branch Name is already taken',
+				'starting_number.required' => 'Starting Number is Required',
+				'ending_number.required' => 'Ending Number is Required',
+				'len.required' => 'Length is Required',
+				'next_number.required' => 'Next Number is Required',
 			];
 			$validator = Validator::make($request->all(), [
 				'category_id' => [
@@ -120,9 +125,24 @@ class SerialNumberGroupController extends Controller {
 					'required',
 					'unique:serial_number_groups,branch_id,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',category_id,' . $request->category_id . ',state_id,' . $request->state_id . ',fy_id,' . $request->fy_id,
 				],
+				'starting_number' => 'required',
+				'ending_number' => 'required',
+				'len' => 'required',
+				'next_number' => 'required',
 			], $error_messages);
 			if ($validator->fails()) {
 				return response()->json(['success' => false, 'errors' => $validator->errors()->all()]);
+			}
+
+			//SEGMENT UNIQUE CHECK
+			if ($request->segment && !empty($request->segment)) {
+				$segments_group_segment = array_column($request->segment, 'segment_id');
+				$segments_group_segment_unique = array_unique($segments_group_segment);
+				if (count($segments_group_segment) != count($segments_group_segment_unique)) {
+					return response()->json(['success' => false, 'errors' => ['Segment name is already taken']]);
+				}
+			} else {
+				return response()->json(['success' => false, 'errors' => ['Segment name is Empty']]);
 			}
 
 			DB::beginTransaction();
@@ -146,10 +166,11 @@ class SerialNumberGroupController extends Controller {
 				$serial_number_group->deleted_at = NULL;
 			}
 			$serial_number_group->save();
+
 			if (count($request->segment) > 0) {
 				$serial_number_group->segments()->sync([]);
 				foreach ($request->segment as $segments) {
-					$serial_number_group->segments()->attach($segments['data_type_id'], [
+					$serial_number_group->segments()->attach($segments['segment_id'], [
 						'value' => $segments['value'],
 						'display_order' => $segments['display_order'],
 					]);

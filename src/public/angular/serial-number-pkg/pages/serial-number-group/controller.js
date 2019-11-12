@@ -72,11 +72,14 @@ app.component('serialNumberGroupList', {
                 serial_number_group_delete_data_url + '/' + $id,
             ).then(function(response) {
                 if (response.data.success) {
-                    new Noty({
+                    $noty = new Noty({
                         type: 'success',
                         layout: 'topRight',
                         text: 'Serial Number Group Deleted Successfully',
                     }).show();
+                    setTimeout(function() {
+                        $noty.close();
+                    }, 3000);
                     $('#serial_number_group').DataTable().ajax.reload(function(json) {});
                     $location.path('/serial-number-pkg/serial-number-group/list');
                 }
@@ -104,7 +107,6 @@ app.component('serialNumberGroupForm', {
             self.state_list = response.data.state_list;
             self.financial_year_list = response.data.financial_year_list;
             self.action = response.data.action;
-            self.serial_number_group.segments = [];
             if (response.data.action == 'Edit') {
                 self.branch_list = response.data.branch_list;
                 if (self.serial_number_group.deleted_at) {
@@ -113,6 +115,7 @@ app.component('serialNumberGroupForm', {
                     self.switch_value = 'Active';
                 }
             } else {
+                self.serial_number_group.segments = [];
                 $scope.add_group();
                 self.switch_value = 'Active';
             }
@@ -156,9 +159,47 @@ app.component('serialNumberGroupForm', {
             self.serial_number_group.segments.splice(index, 1);
         }
 
+        //ADDED RULES FOR VALIDATING START NUMBER,END NUMBER AND NEXT NUMBER
+        //END NUMBER VALIDATION
+        $.validator.addMethod('greaterThan', function(value, element, param) {
+            var i = parseInt(value);
+            var j = parseInt($(param).val());
+            return i > j;
+        }, "Must be greater than the Starting Number");
+
+        //NEXT NUMBER VALIDATION
+        $.validator.addMethod('minimumStart', function(value, element, param) {
+            var i = parseInt(value);
+            var j = parseInt($(param).val());
+            console.log(i, j);
+            return i > j;
+        }, "Must be greater than the Starting Number");
+        $.validator.addMethod('maximumEnd', function(value, element, param) {
+            var i = parseInt(value);
+            var j = parseInt($(param).val());
+            console.log(i, j);
+            return i < j;
+        }, "Must be lesser than the Ending Number");
+
+
+
         var form_id = '#form';
         var v = jQuery(form_id).validate({
             ignore: '',
+            rules: {
+                'starting_number': {
+                    required: true
+                },
+                'ending_number': {
+                    required: true,
+                    greaterThan: "#starting_number"
+                },
+                'next_number': {
+                    required: true,
+                    minimumStart: "#starting_number",
+                    maximumEnd: "#ending_number"
+                },
+            },
             invalidHandler: function(event, validator) {
                 new Noty({
                     type: 'error',
@@ -178,11 +219,14 @@ app.component('serialNumberGroupForm', {
                     })
                     .done(function(res) {
                         if (res.success == true) {
-                            new Noty({
+                            $noty = new Noty({
                                 type: 'success',
                                 layout: 'topRight',
                                 text: res.message,
                             }).show();
+                            setTimeout(function() {
+                                $noty.close();
+                            }, 3000);
                             $location.path('/serial-number-pkg/serial-number-group/list');
                             $scope.$apply();
                         } else {
@@ -192,11 +236,14 @@ app.component('serialNumberGroupForm', {
                                 for (var i in res.errors) {
                                     errors += '<li>' + res.errors[i] + '</li>';
                                 }
-                                new Noty({
+                                $noty = new Noty({
                                     type: 'error',
                                     layout: 'topRight',
                                     text: errors
                                 }).show();
+                                setTimeout(function() {
+                                    $noty.close();
+                                }, 3000);
                             } else {
                                 $('#submit').button('reset');
                                 $location.path('/serial-number-pkg/serial-number-group/list');
@@ -206,11 +253,14 @@ app.component('serialNumberGroupForm', {
                     })
                     .fail(function(xhr) {
                         $('#submit').button('reset');
-                        new Noty({
+                        $noty = new Noty({
                             type: 'error',
                             layout: 'topRight',
                             text: 'Something went wrong at server',
                         }).show();
+                        setTimeout(function() {
+                            $noty.close();
+                        }, 3000);
                     });
             }
         });

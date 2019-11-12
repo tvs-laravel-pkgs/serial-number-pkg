@@ -68,11 +68,14 @@ app.component('serialNumberSegmentList', {
                 serial_number_segment_delete_data_url + '/' + $id,
             ).then(function(response) {
                 if (response.data.success) {
-                    new Noty({
+                    $noty = new Noty({
                         type: 'success',
                         layout: 'topRight',
                         text: 'Serial Number Segment Deleted Successfully',
                     }).show();
+                    setTimeout(function() {
+                        $noty.close();
+                    }, 3000);
                     $('#serial_number_segment').DataTable().ajax.reload(function(json) {});
                     $location.path('/serial-number-pkg/serial-number-segment/list');
                 }
@@ -151,11 +154,14 @@ app.component('serialNumberSegmentForm', {
                     })
                     .done(function(res) {
                         if (res.success == true) {
-                            new Noty({
+                            $noty = new Noty({
                                 type: 'success',
                                 layout: 'topRight',
                                 text: res.message,
                             }).show();
+                            setTimeout(function() {
+                                $noty.close();
+                            }, 3000);
                             $location.path('/serial-number-pkg/serial-number-segment/list');
                             $scope.$apply();
                         } else {
@@ -165,11 +171,14 @@ app.component('serialNumberSegmentForm', {
                                 for (var i in res.errors) {
                                     errors += '<li>' + res.errors[i] + '</li>';
                                 }
-                                new Noty({
+                                $noty = new Noty({
                                     type: 'error',
                                     layout: 'topRight',
                                     text: errors
                                 }).show();
+                                setTimeout(function() {
+                                    $noty.close();
+                                }, 3000);
                             } else {
                                 $('#submit').button('reset');
                                 $location.path('/serial-number-pkg/serial-number-segment/list');
@@ -179,11 +188,14 @@ app.component('serialNumberSegmentForm', {
                     })
                     .fail(function(xhr) {
                         $('#submit').button('reset');
-                        new Noty({
+                        $noty = new Noty({
                             type: 'error',
                             layout: 'topRight',
                             text: 'Something went wrong at server',
                         }).show();
+                        setTimeout(function() {
+                            $noty.close();
+                        }, 3000);
                     });
             }
         });
