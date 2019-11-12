@@ -171,17 +171,13 @@ app.component('serialNumberGroupForm', {
         $.validator.addMethod('minimumStart', function(value, element, param) {
             var i = parseInt(value);
             var j = parseInt($(param).val());
-            console.log(i, j);
             return i > j;
         }, "Must be greater than the Starting Number");
         $.validator.addMethod('maximumEnd', function(value, element, param) {
             var i = parseInt(value);
             var j = parseInt($(param).val());
-            console.log(i, j);
             return i < j;
         }, "Must be lesser than the Ending Number");
-
-
 
         var form_id = '#form';
         var v = jQuery(form_id).validate({

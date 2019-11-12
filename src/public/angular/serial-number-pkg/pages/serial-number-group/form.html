@@ -173,7 +173,7 @@
                                                                 <input type="text" ng-model="segment.pivot.display_order" class="form-control type-sm required" ng-model="display_order" name="segment[{{index}}][display_order]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Enter Display Order" />
                                                             </td>
                                                             <td>
-                                                                <a href="javascript:;" ng-click="removeGroup()"><img class="img-responsive" src="./public/theme/img/table/cndn/delete.svg" alt="Delete" /></a>
+                                                                <a href="javascript:;" ng-click="removeGroup(index)"><img class="img-responsive" src="./public/theme/img/table/cndn/delete.svg" alt="Delete" /></a>
                                                             </td>
                                                         </tr>
                                                     </tbody>
