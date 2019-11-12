@@ -35,7 +35,7 @@
                             <div class="tab-pane fade in active" id="serial-number-segment" data-animation="fadeInUp" data-animation-delay="300">
                                 <div class="tab-pane-wrap">
                                     <div class="row">
-                                        <div class="col-lg-6 col-md-8">
+                                        <div class="col-lg-8 col-md-10">
                                             <div class="table-responsive">
                                                 <table class="table table-form">
                                                     <thead>
@@ -50,7 +50,7 @@
                                                         <tr ng-repeat="(index, segment) in $ctrl.serial_number_segment">
                                                             <input type="hidden" ng-model="segment.id" name="segment[{{index}}][id]" value="{{segment.id}}">
                                                             <td>
-                                                                <input type="text" class="form-control type-sm required" ng-model="segment.name" name="segment[{{index}}][name]" placeholder="Enter Segment Name" />
+                                                                <input type="text" class="form-control type-sm required" ng-model="segment.name" name="segment[{{index}}][name]" placeholder="Enter Segment Name" maxlength="191" />
                                                             </td>
                                                             <td>
                                                                 <md-select ng-model="segment.data_type_id" placeholder="Select Segment Type" data-md-container-class="selectdemoSelectHeader">

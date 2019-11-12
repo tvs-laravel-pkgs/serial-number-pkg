@@ -32,7 +32,7 @@ class SerialNumberGroupController extends Controller {
 				'serial_number_groups.ending_number',
 				'serial_number_groups.next_number',
 				DB::raw('COUNT(sngsns.serial_number_group_id) as segment'),
-				DB::raw('IF((serial_number_groups.deleted_at) IS NULL,"Active","In Active") as status')
+				DB::raw('IF((serial_number_groups.deleted_at) IS NULL,"Active","Inactive") as status')
 			)
 			->join('serial_number_categories', 'serial_number_categories.id', 'serial_number_groups.category_id')
 			->join('financial_years', 'financial_years.id', 'serial_number_groups.fy_id')
@@ -75,10 +75,10 @@ class SerialNumberGroupController extends Controller {
 			$action = 'Edit';
 			$this->data['branch_list'] = Outlet::select('id', 'name')->where('state_id', $serial_number_group->state_id)->where('company_id', Auth::user()->company_id)->get();
 		}
-		$this->data['category_list'] = SerialNumberCategory::getCategoryList();
-		$this->data['state_list'] = State::getStateList();
-		$this->data['type_list'] = SerialNumberSegment::getSegmentList();
-		$this->data['financial_year_list'] = FinancialYear::getFinanceYearList();
+		$this->data['category_list'] = collect(SerialNumberCategory::getCategoryList())->prepend(['id' => '', 'name' => 'Select Category']);
+		$this->data['state_list'] = collect(State::getStateList())->prepend(['id' => '', 'name' => 'Select State']);
+		$this->data['type_list'] = collect(SerialNumberSegment::getSegmentList())->prepend(['id' => '', 'name' => 'Select Type']);
+		$this->data['financial_year_list'] = collect(FinancialYear::getFinanceYearList())->prepend(['id' => '', 'name' => 'Select Financial Year']);
 		$this->data['serial_number_group'] = $serial_number_group;
 		$this->data['action'] = $action;
 

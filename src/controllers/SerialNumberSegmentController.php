@@ -22,7 +22,7 @@ class SerialNumberSegmentController extends Controller {
 				'serial_number_segments.id',
 				'serial_number_segments.name as name',
 				'configs.name as type',
-				DB::raw('IF((serial_number_segments.deleted_at) IS NULL,"Active","In Active") as status')
+				DB::raw('IF((serial_number_segments.deleted_at) IS NULL,"Active","Inactive") as status')
 			)
 			->join('configs', 'configs.id', 'serial_number_segments.data_type_id')
 			->where('serial_number_segments.company_id', Auth::user()->company_id)
@@ -58,7 +58,7 @@ class SerialNumberSegmentController extends Controller {
 				->where('id', $id)->get();
 			$action = 'Edit';
 		}
-		$this->data['type_list'] = Config::getSegmentTypeList();
+		$this->data['type_list'] = collect(Config::getSegmentTypeList()->prepend(['id' => '', 'name' => 'Select Type']));
 		$this->data['serial_number_segment'] = $serial_number_segment;
 		$this->data['action'] = $action;
 
