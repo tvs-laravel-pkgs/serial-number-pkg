@@ -40,7 +40,7 @@
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
                                                 <label>Type <sup class="mandatory">*</sup></label>
-                                                <md-select ng-model="$ctrl.serial_number_group.category_id" placeholder="Select Category" data-md-container-class="selectdemoSelectHeader">
+                                                <md-select ng-model="$ctrl.serial_number_group.category_id" placeholder="Select Category" data-md-container-class="selectdemoSelectHeader" ng-change="showCategoryinSegmentTab($ctrl.serial_number_group.category_id)">
                                                     <md-select-header class="demo-select-header ng-hide">
                                                         <input ng-model="searchCategory" type="search" placeholder="Search for a Category" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                                     </md-select-header>
@@ -142,7 +142,7 @@
                                 <div class="tab-pane-wrap">
                                     <div class="row">
                                         <div class="col-lg-8 col-md-10">
-                                            <h6 class="tab-pane-title">Serial Number Group : <span class="color-primary-light">Free Text Invoice</span></h6>
+                                            <h6 class="tab-pane-title">Serial Number Group : <span class="color-primary-light">{{$ctrl.category_name_based_groupTab}}</span></h6>
                                             <div class="table-responsive">
                                                 <table class="table table-form">
                                                     <thead>

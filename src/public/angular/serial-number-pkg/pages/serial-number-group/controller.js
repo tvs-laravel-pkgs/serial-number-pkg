@@ -114,6 +114,7 @@ app.component('serialNumberGroupForm', {
                 } else {
                     self.switch_value = 'Active';
                 }
+                $scope.showCategoryinSegmentTab(self.serial_number_group.category_id);
             } else {
                 self.serial_number_group.segments = [];
                 $scope.add_group();
@@ -121,6 +122,16 @@ app.component('serialNumberGroupForm', {
             }
             $rootScope.loading = false;
         });
+
+        $scope.showCategoryinSegmentTab = function($id) {
+            if ($id) {
+                $.each(self.category_list, function(index, value) {
+                    if ($id == value.id) {
+                        self.category_name_based_groupTab = value.name;
+                    }
+                });
+            }
+        }
 
         /* Tab Funtion */
         $('.btn-nxt').on("click", function() {
@@ -200,7 +211,7 @@ app.component('serialNumberGroupForm', {
                 new Noty({
                     type: 'error',
                     layout: 'topRight',
-                    text: 'Check all tabs for errors'
+                    text: 'You have errors,Please check all tabs'
                 }).show();
             },
             submitHandler: function(form) {
