@@ -214,6 +214,15 @@ app.component('serialNumberGroupForm', {
                     text: 'You have errors,Please check all tabs'
                 }).show();
             },
+            errorPlacement: function(error, element) {
+                if (element.attr('name') == 'ending_number') {
+                    error.appendTo($('.ending_number_error'));
+                } else if (element.attr('name') == 'next_number') {
+                    error.appendTo($('.next_number_error'));
+                } else {
+                    error.insertAfter(element)
+                }
+            },
             submitHandler: function(form) {
                 let formData = new FormData($(form_id)[0]);
                 $('#submit').button('loading');

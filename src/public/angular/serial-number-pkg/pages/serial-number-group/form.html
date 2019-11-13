@@ -104,6 +104,7 @@
                                                 <label>Ending Number <sup class="mandatory">*</sup></label>
                                                 <input type="text" class="form-control required" ng-model="$ctrl.serial_number_group.ending_number" name="ending_number" id="ending_number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Enter Ending Number" />
                                             </div><!-- Feild -->
+                                            <span class="ending_number_error"></span>
                                         </div><!-- Column -->
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
@@ -116,6 +117,7 @@
                                                 <label>Next Number<sup class="mandatory">*</sup></label>
                                                 <input type="text" class="form-control required" ng-model="$ctrl.serial_number_group.next_number" name="next_number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Enter Next" />
                                             </div><!-- Feild -->
+                                            <span class="next_number_error"></span>
                                         </div><!-- Column -->
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
