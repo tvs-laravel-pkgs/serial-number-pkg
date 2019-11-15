@@ -41,6 +41,62 @@ class SerialNumberGroup extends Model {
 		}
 	}
 
+	public static function createFromObject($record_data) {
+
+		$errors = [];
+		$company = Company::where('code', $record_data->company)->first();
+		if (!$company) {
+			dump('Invalid Company : ' . $record_data->company);
+			return;
+		}
+
+		$admin = $company->admin();
+		if (!$admin) {
+			dump('Default Admin user not found');
+			return;
+		}
+
+		$category = SerialNumberCategory::where('name', $record_data->category)->where('company_id', $company->id)->first();
+		if (!$category) {
+			$errors[] = 'Invalid category : ' . $record_data->category;
+		}
+
+		$fy = FinancialYear::where('code', $record_data->fy)->where('company_id', $company->id)->first();
+		if (!$fy) {
+			$errors[] = 'Invalid fy : ' . $record_data->fy;
+		}
+
+		$state = State::where('name', $record_data->state)->first();
+		if (!$state) {
+			$errors[] = 'Invalid state : ' . $record_data->state;
+		}
+
+		$outlet = Outlet::where('code', $record_data->outlet)->where('company_id', $company->id)->first();
+		if (!$outlet) {
+			$errors[] = 'Invalid outlet : ' . $record_data->outlet;
+		}
+
+		if (count($errors) > 0) {
+			dump($errors);
+			return;
+		}
+
+		$record = self::firstOrNew([
+			'company_id' => $company->id,
+			'category_id' => $category->id,
+			'fy_id' => $fy->id,
+			'state_id' => $state->id,
+			'branch_id' => $outlet->id,
+		]);
+		$record->len = $record_data->length;
+		$record->starting_number = $record_data->starting_number;
+		$record->ending_number = $record_data->ending_number;
+		$record->next_number = $record_data->next_number;
+		$record->created_by_id = $admin->id;
+		$record->save();
+		return $record;
+	}
+
 	public static function generateNumber($category_id, $fy_id = NULL, $state_id, $branch_id) {
 		try {
 			$response = array();
@@ -109,62 +165,6 @@ class SerialNumberGroup extends Model {
 		} catch (Exception $e) {
 			dd($e);
 		}
-	}
-
-	public static function createFromObject($record_data) {
-
-		$errors = [];
-		$company = Company::where('code', $record_data->company)->first();
-		if (!$company) {
-			dump('Invalid Company : ' . $record_data->company);
-			return;
-		}
-
-		$admin = $company->admin();
-		if (!$admin) {
-			dump('Default Admin user not found');
-			return;
-		}
-
-		$category = SerialNumberCategory::where('name', $record_data->category)->where('company_id', $company->id)->first();
-		if (!$category) {
-			$errors[] = 'Invalid category : ' . $record_data->category;
-		}
-
-		$fy = FinancialYear::where('code', $record_data->fy)->where('company_id', $company->id)->first();
-		if (!$fy) {
-			$errors[] = 'Invalid fy : ' . $record_data->fy;
-		}
-
-		$state = State::where('name', $record_data->state)->first();
-		if (!$state) {
-			$errors[] = 'Invalid state : ' . $record_data->state;
-		}
-
-		$outlet = Outlet::where('code', $record_data->outlet)->where('company_id', $company->id)->first();
-		if (!$outlet) {
-			$errors[] = 'Invalid outlet : ' . $record_data->outlet;
-		}
-
-		if (count($errors) > 0) {
-			dump($errors);
-			return;
-		}
-
-		$record = self::firstOrNew([
-			'company_id' => $company->id,
-			'category_id' => $category->id,
-			'fy_id' => $fy->id,
-			'state_id' => $state->id,
-			'branch_id' => $outlet->id,
-		]);
-		$record->len = $record_data->length;
-		$record->starting_number = $record_data->starting_number;
-		$record->ending_number = $record_data->ending_number;
-		$record->next_number = $record_data->next_number;
-		$record->created_by_id = $admin->id;
-		$record->save();
-		return $record;
 	}
 
 	public static function mapSegments($records) {
