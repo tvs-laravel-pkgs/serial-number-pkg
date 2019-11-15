@@ -6,7 +6,6 @@ use Abs\SerialNumberPkg\SerialNumberCategory;
 use Abs\SerialNumberPkg\SerialNumberGroup;
 use Abs\SerialNumberPkg\SerialNumberSegment;
 use App\Http\Controllers\Controller;
-use App\Outlet;
 use App\State;
 use Auth;
 use Carbon\Carbon;
@@ -25,9 +24,9 @@ class SerialNumberGroupController extends Controller {
 			->select(
 				'serial_number_groups.id',
 				'serial_number_categories.name as name',
-				DB::raw('CONCAT(financial_years.from,"/",financial_years.to) as finance_year'),
-				'states.name as state',
-				'outlets.name as branch',
+				DB::raw('IF((serial_number_groups.fy_id) IS NULL,"--",CONCAT(financial_years.from,"/",financial_years.to)) as finance_year'),
+				DB::raw('IF((states.name) IS NULL,"--",states.name) as state'),
+				DB::raw('IF((outlets.name) IS NULL,"--",outlets.name) as branch'),
 				'serial_number_groups.starting_number',
 				'serial_number_groups.ending_number',
 				'serial_number_groups.next_number',
@@ -35,9 +34,9 @@ class SerialNumberGroupController extends Controller {
 				DB::raw('IF((serial_number_groups.deleted_at) IS NULL,"Active","Inactive") as status')
 			)
 			->join('serial_number_categories', 'serial_number_categories.id', 'serial_number_groups.category_id')
-			->join('financial_years', 'financial_years.id', 'serial_number_groups.fy_id')
-			->join('states', 'states.id', 'serial_number_groups.state_id')
-			->join('outlets', 'outlets.id', 'serial_number_groups.branch_id')
+			->leftJoin('financial_years', 'financial_years.id', 'serial_number_groups.fy_id')
+			->leftJoin('states', 'states.id', 'serial_number_groups.state_id')
+			->leftJoin('outlets', 'outlets.id', 'serial_number_groups.branch_id')
 			->leftJoin('serial_number_group_serial_number_segment as sngsns', 'sngsns.serial_number_group_id', 'serial_number_groups.id')
 			->where('serial_number_groups.company_id', Auth::user()->company_id)
 			->orderby('serial_number_groups.id', 'desc')
@@ -73,12 +72,12 @@ class SerialNumberGroupController extends Controller {
 				'segments',
 			])->find($id);
 			$action = 'Edit';
-			$this->data['branch_list'] = Outlet::select('id', 'name')->where('state_id', $serial_number_group->state_id)->where('company_id', Auth::user()->company_id)->get();
+			$this->data['branch_list'] = collect(State::getOutlet($serial_number_group->state_id))->prepend(['id' => '', 'name' => 'Select Branch']);
 		}
 		$this->data['category_list'] = collect(SerialNumberCategory::getCategoryList())->prepend(['id' => '', 'name' => 'Select Category']);
 		$this->data['state_list'] = collect(State::getStateList())->prepend(['id' => '', 'name' => 'Select State']);
 		$this->data['type_list'] = collect(SerialNumberSegment::getSegmentList())->prepend(['id' => '', 'name' => 'Select Type']);
-		$this->data['financial_year_list'] = collect(FinancialYear::getFinanceYearList())->prepend(['id' => '', 'name' => 'Select Financial Year']);
+		$this->data['financial_year_list'] = collect(FinancialYear::getFinanceYearList())->prepend(['id' => '', 'code' => 'Select Financial Year']);
 		$this->data['serial_number_group'] = $serial_number_group;
 		$this->data['action'] = $action;
 
@@ -86,9 +85,19 @@ class SerialNumberGroupController extends Controller {
 	}
 
 	public function getBrancheBasedState($id) {
-		$this->data['branch_list'] = State::getOutlet($id);
+		$this->data['branch_list'] = collect(State::getOutlet($id))->prepend(['id' => '', 'name' => 'Select Branch']);
 
 		return response()->json($this->data);
+	}
+
+	public function getSegmentBasedId($id) {
+		$get_segment_type = SerialNumberSegment::select(
+			'serial_number_segments.data_type_id'
+		)
+			->where('serial_number_segments.id', $id)
+			->first();
+
+		return response()->json($get_segment_type);
 	}
 
 	public function saveSerialNumberGroup(Request $request) {

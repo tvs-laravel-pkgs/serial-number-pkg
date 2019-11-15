@@ -9,7 +9,7 @@
                 </div><!-- Page Header Content -->
                 <div class="page-header-content title-block">
                     <h1 class="title"><b>{{$ctrl.action}} Serial Number Group</b></h1>
-                    <p class="subtitle">Serial Number Group List / Form</p>
+                    <p class="subtitle"><a href="#!/serial-number-pkg/serial-number-group/list">Serial Number Group List</a> / Form</p>
                 </div><!-- Page Header Content -->
             </div><!-- Page Header Content Left -->
         </div><!-- Page Header Inner -->
@@ -54,7 +54,7 @@
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
                                                 <label>Financial Year</label>
-                                                <md-select ng-model="$ctrl.serial_number_group.fy_id" placeholder="Select Financial Year" data-md-container-class="selectdemoSelectHeader">
+                                                <md-select ng-model="$ctrl.serial_number_group.fy_id" placeholder="Select Financial Year" data-md-container-class="selectdemoSelectHeader" ng-change="showFinanceYear($ctrl.serial_number_group.fy_id)">
                                                     <md-select-header class="demo-select-header ng-hide">
                                                         <input ng-model="searchFinance" type="search" placeholder="Search for a Financial Year" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                                     </md-select-header>
@@ -82,7 +82,7 @@
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
                                                 <label>Branch</label>
-                                                <md-select ng-model="$ctrl.serial_number_group.branch_id" placeholder="Select Branch" data-md-container-class="selectdemoSelectHeader">
+                                                <md-select ng-model="$ctrl.serial_number_group.branch_id" placeholder="Select Branch" data-md-container-class="selectdemoSelectHeader" ng-change="showBranchCode($ctrl.serial_number_group.branch_id)">
                                                     <md-select-header class="demo-select-header ng-hide">
                                                         <input ng-model="searchType" type="search" placeholder="Search for a Branch" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                                     </md-select-header>
@@ -158,7 +158,7 @@
                                                     <tbody>
                                                         <tr ng-repeat="(index, segment) in $ctrl.serial_number_group.segments">
                                                             <td>
-                                                                <md-select ng-model="segment.pivot.segment_id" placeholder="Select Type" data-md-container-class="selectdemoSelectHeader">
+                                                                <md-select ng-model="segment.pivot.segment_id" placeholder="Select Type" data-md-container-class="selectdemoSelectHeader" ng-change="getSegmentgroupSegment(segment.pivot.segment_id,index)">
                                                                     <md-select-header class="demo-select-header ng-hide">
                                                                         <input ng-model="searchType" type="search" placeholder="Search for a Type" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                                                     </md-select-header>
@@ -169,10 +169,10 @@
                                                                 <input type="hidden" name="segment[{{index}}][segment_id]" value='{{segment.pivot.segment_id}}' class="required">
                                                             </td>
                                                             <td>
-                                                                <input type="text" ng-model="segment.pivot.value" class="form-control type-sm required" ng-model="segment.value" name="segment[{{index}}][value]" placeholder="Enter Value" />
+                                                                <input style="display: none;" type="text" ng-model="segment.pivot.value" class="form-control type-sm required hidden_based_segment_{{index}}" name="segment[{{index}}][value]" placeholder="Enter Value" ng-change="getSegmentValue(index)" />
                                                             </td>
                                                             <td>
-                                                                <input type="text" ng-model="segment.pivot.display_order" class="form-control type-sm required" ng-model="display_order" name="segment[{{index}}][display_order]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Enter Display Order" />
+                                                                <input type="text" ng-model="segment.pivot.display_order" class="form-control type-sm required orderCheck_{{index}}" name="segment[{{index}}][display_order]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" ng-change="orderChange(index)" placeholder="Enter Display Order" />
                                                             </td>
                                                             <td>
                                                                 <a href="javascript:;" ng-click="removeGroup(index)"><img class="img-responsive" src="./public/theme/img/table/cndn/delete.svg" alt="Delete" /></a>
@@ -188,7 +188,7 @@
                                                     </tfoot>
                                                 </table>
                                             </div><!-- Table Responsive -->
-                                            <h6 class="tab-pane-title">Preview : <span class="color-primary-light"></span></h6>
+                                            <h6 class="tab-pane-title">Preview : <span class="color-primary-light"> {{$ctrl.segmentValue}}{{$ctrl.financial_year}}{{$ctrl.state_code}}{{$ctrl.branch_code}}</span></h6>
                                         </div><!-- Column -->
                                         <div class="tab-pane-footer">
                                             <div class="row">
