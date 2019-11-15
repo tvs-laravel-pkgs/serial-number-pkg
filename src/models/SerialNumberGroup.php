@@ -158,7 +158,7 @@ class SerialNumberGroup extends Model {
 			'state_id' => $state->id,
 			'branch_id' => $outlet->id,
 		]);
-		$record->length = $record_data->length;
+		$record->len = $record_data->length;
 		$record->starting_number = $record_data->starting_number;
 		$record->ending_number = $record_data->ending_number;
 		$record->next_number = $record_data->next_number;
