@@ -115,6 +115,9 @@ app.component('serialNumberGroupForm', {
                     self.switch_value = 'Active';
                 }
                 $scope.showCategoryinSegmentTab(self.serial_number_group.category_id);
+                $.each(self.serial_number_group.segments, function(index, value) {
+                    $scope.getSegmentgroupSegment(value.id, index);
+                });
             } else {
                 self.serial_number_group.segments = [];
                 $scope.add_group();
@@ -130,7 +133,77 @@ app.component('serialNumberGroupForm', {
                         self.category_name_based_groupTab = value.name;
                     }
                 });
+            } else {
+                self.category_name_based_groupTab = '';
             }
+        }
+        $scope.showFinanceYear = function($id) {
+            if ($id) {
+                $.each(self.financial_year_list, function(index, value) {
+                    if ($id == value.id) {
+                        self.finance_year_based_groupTab = value.code;
+                    }
+                });
+            } else {
+                self.finance_year_based_groupTab = '';
+            }
+        }
+        $scope.showBranchCode = function($id) {
+            if ($id) {
+                $.each(self.branch_list, function(index, value) {
+                    if ($id == value.id) {
+                        self.branch_based_groupTab = value.code;
+                    }
+                });
+            } else {
+                self.branch_based_groupTab = '';
+            }
+        }
+
+        //GET VALUE BASED SEGMENT
+        $scope.getSegmentgroupSegment = function(id, index) {
+            if (id) {
+                $http.get(
+                    get_segment_based_on_change_data_url + '/' + id
+                ).then(function(response) {
+                    var data_type_id = response.data.data_type_id;
+                    if (data_type_id == 1140) {
+                        $(".hidden_based_segment_" + index).css('display', 'block');
+                        $(document).on('keyup', ".hidden_based_segment_" + index,
+                            function() {
+                                console.log($(".hidden_based_segment_" + index).val());
+                                self.segmentValue = $(".hidden_based_segment_" + index).val();
+                            });
+                    } else if (data_type_id == 1141) {
+                        self.financial_year = self.finance_year_based_groupTab;
+                        $(".hidden_based_segment_" + index).css('display', 'none');
+                    } else if (data_type_id == 1142) {
+                        self.state_code = self.state_based_groupTab;
+                        $(".hidden_based_segment_" + index).css('display', 'none');
+                    } else if (data_type_id == 1143) {
+                        self.branch_code = self.branch_based_groupTab;
+                        $(".hidden_based_segment_" + index).css('display', 'none');
+                    } else {
+                        $(".hidden_based_segment_" + index).css('display', 'none');
+                    }
+                });
+            }
+        }
+
+        //GET SEGMENT VALUE
+        $scope.getSegmentValue = function(index) {
+
+        }
+
+        //SHOW BASED ORDER
+        self.test = [];
+        $scope.orderChange = function(index) {
+            if ($(".orderCheck_" + index).val()) {
+                self.test.push({ val: $(".orderCheck_" + index).val(), index: index });
+            } else {
+                self.test.pop({ val: $(".orderCheck_" + index).val(), index: index });
+            }
+            console.log(self.test.sort());
         }
 
         /* Tab Funtion */
@@ -150,6 +223,15 @@ app.component('serialNumberGroupForm', {
 
         //SHOW BRANCH BASED STATE
         $scope.onSelectedState = function($id) {
+            if ($id) {
+                $.each(self.state_list, function(index, value) {
+                    if ($id == value.id) {
+                        self.state_based_groupTab = value.code;
+                    }
+                });
+            } else {
+                self.state_based_groupTab = '';
+            }
             $http.get(
                 get_branch_based_state_url + '/' + $id
             ).then(function(response) {
@@ -182,12 +264,12 @@ app.component('serialNumberGroupForm', {
         $.validator.addMethod('minimumStart', function(value, element, param) {
             var i = parseInt(value);
             var j = parseInt($(param).val());
-            return i > j;
+            return i >= j;
         }, "Must be greater than the Starting Number");
         $.validator.addMethod('maximumEnd', function(value, element, param) {
             var i = parseInt(value);
             var j = parseInt($(param).val());
-            return i < j;
+            return i <= j;
         }, "Must be lesser than the Ending Number");
 
         var form_id = '#form';
@@ -208,11 +290,14 @@ app.component('serialNumberGroupForm', {
                 },
             },
             invalidHandler: function(event, validator) {
-                new Noty({
+                $noty = new Noty({
                     type: 'error',
                     layout: 'topRight',
                     text: 'You have errors,Please check all tabs'
                 }).show();
+                setTimeout(function() {
+                    $noty.close();
+                }, 3000)
             },
             errorPlacement: function(error, element) {
                 if (element.attr('name') == 'ending_number') {

@@ -17,4 +17,5 @@ Route::group(['namespace' => 'Abs\SerialNumberPkg', 'middleware' => ['web', 'aut
 	Route::get('/serial-number-groups/add/{id?}', 'SerialNumberGroupController@getSerialNumberGroupForm')->name('getSerialNumberGroupForm');
 	Route::get('/serial-number-groups/delete/{id}', 'SerialNumberGroupController@deleteSerialNumberGroup')->name('deleteSerialNumberGroup');
 	Route::get('/serial-number-groups/getBranch/{state_id}', 'SerialNumberGroupController@getBrancheBasedState')->name('getBrancheBasedState');
+	Route::get('/serial-number-groups/get-segment/{id}', 'SerialNumberGroupController@getSegmentBasedId')->name('getSegmentBasedId');
 });
