@@ -5,6 +5,7 @@ use App\Company;
 use App\FinancialYear;
 use App\Outlet;
 use App\State;
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -24,7 +25,7 @@ class SerialNumberGroup extends Model {
 	];
 
 	public function segments() {
-		return $this->belongsToMany('Abs\SerialNumberPkg\SerialNumberSegment', 'serial_number_group_serial_number_segment', 'serial_number_group_id', 'segment_id')->withPivot(['value', 'display_order']);
+		return $this->belongsToMany('Abs\SerialNumberPkg\SerialNumberSegment', 'serial_number_group_serial_number_segment', 'serial_number_group_id', 'segment_id')->withPivot(['value', 'display_order'])->orderBy('display_order', 'asc');
 	}
 
 	public static function createFromCollection($records) {
@@ -37,6 +38,76 @@ class SerialNumberGroup extends Model {
 			} catch (Exception $e) {
 				dd($e);
 			}
+		}
+	}
+
+	public static function generateNumber($category_id, $fy_id = NULL, $state_id, $branch_id) {
+		try {
+			$response = array();
+			$financial_year = FinancialYear::where('id', $fy_id)->first();
+			if (!$financial_year) {
+				$response['success'] = false;
+				$response['error'] = 'No Serial number found';
+				return $response;
+			}
+
+			$state = State::where('id', $state_id)->first();
+			if (!$state) {
+				$response['success'] = false;
+				$response['error'] = 'No Serial number found';
+				return $response;
+			}
+
+			$branch = Outlet::where('id', $branch_id)->first();
+			if (!$branch) {
+				$response['success'] = false;
+				$response['error'] = 'No Serial number found';
+				return $response;
+			}
+
+			$serial_number_group = self::where('category_id', $category_id)
+				->where('fy_id', $fy_id)
+				->where('state_id', $state_id)
+				->where('branch_id', $branch_id)
+				->where('company_id', Auth::user()->company_id)
+				->first();
+			if (!$serial_number_group) {
+				$response['success'] = false;
+				$response['error'] = 'No Serial number found';
+				return $response;
+			}
+
+			//ADD DIGITS BEFORE NEXT NUMBER
+			$number_format = sprintf("%0" . $serial_number_group->len . "d", $serial_number_group->next_number);
+
+			//GENERATE NUMBER BASED ON SEGMENTS
+			$number = '';
+			if (count($serial_number_group->segments) > 0) {
+				foreach ($serial_number_group->segments as $key => $segment) {
+					if ($segment->data_type_id == 1140) {
+						$number .= $segment->pivot->value;
+					} else if ($segment->data_type_id == 1141) {
+						$number .= $financial_year->code;
+					} else if ($segment->data_type_id == 1142) {
+						$number .= $state->code;
+					} else if ($segment->data_type_id == 1143) {
+						$number .= $branch->code;
+					}
+				}
+			}
+			//CONCATE
+			$serial_number = $number . $number_format;
+
+			//UPDATE SERIAL NUMBER GROUP NEXT NUMBER
+			$serial_number_group->next_number = $serial_number_group->next_number + 1;
+			$serial_number_group->save();
+
+			$response['success'] = true;
+			$response['number'] = $serial_number;
+			return $response;
+
+		} catch (Exception $e) {
+			dd($e);
 		}
 	}
 
