@@ -9,8 +9,8 @@ app.component('serialNumberSegmentList', {
         var dataTable = $('#serial_number_segment').DataTable({
             "dom": cndn_dom_structure,
             "language": {
-                "search": "",
-                "searchPlaceholder": "Search",
+                //"search": "",
+                //"searchPlaceholder": "Search",
                 "lengthMenu": "Rows _MENU_",
                 "paginate": {
                     "next": '<i class="icon ion-ios-arrow-forward"></i>',
@@ -20,6 +20,16 @@ app.component('serialNumberSegmentList', {
             pageLength: 10,
             processing: true,
             serverSide: true,
+            stateSaveCallback: function(settings, data) {
+                localStorage.setItem('SDataTables_' + settings.sInstance, JSON.stringify(data));
+            },
+            stateLoadCallback: function(settings) {
+                var state_save_val = JSON.parse(localStorage.getItem('SDataTables_' + settings.sInstance));
+                if (state_save_val) {
+                    $('#search_serial_number_segment').val(state_save_val.search.search);
+                }
+                return JSON.parse(localStorage.getItem('SDataTables_' + settings.sInstance));
+            },
             paging: true,
             stateSave: true,
             ordering: false,
@@ -39,15 +49,15 @@ app.component('serialNumberSegmentList', {
                 { data: 'type', name: 'configs.name' },
                 // { data: 'status', searchable: false },
             ],
-            "infoCallback": function(settings, start, end, max, total, pre) {
-                $('#table_info').html('(' + max + ')')
+            infoCallback: function(settings, start, end, max, total, pre) {
+                $('#table_info').html(total)
+                $('.foot_info').html('Showing ' + start + ' to ' + end + ' of ' + max + ' entries')
             },
             rowCallback: function(row, data) {
                 $(row).addClass('highlight-row');
             }
         });
         $('.dataTables_length select').select2();
-        $('#search_serial_number_segment').val(this.value);
 
         $scope.clear_search = function() {
             $('#search_serial_number_segment').val('');
@@ -138,6 +148,22 @@ app.component('serialNumberSegmentForm', {
             }
             self.serial_number_segment.splice(index, 1);
         }
+
+        // $(document).ready(function() {
+        //     var segments = $('input[name^="segment"]');
+        //     segments.filter('input[name$="[name]"]').each(function() {
+        //         $(this).rules("add", {
+        //             required: true,
+        //             minlength: 3,
+        //             maxlength: 191,
+        //         });
+        //     });
+        //     segments.filter('input[name$="[data_type_id]"]').each(function() {
+        //         $(this).rules("add", {
+        //             required: true,
+        //         });
+        //     });
+        // });
 
         var form_id = '#form';
         var v = jQuery(form_id).validate({

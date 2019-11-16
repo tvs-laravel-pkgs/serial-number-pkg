@@ -9,8 +9,8 @@ app.component('serialNumberGroupList', {
         var dataTable = $('#serial_number_group').DataTable({
             "dom": cndn_dom_structure,
             "language": {
-                "search": "",
-                "searchPlaceholder": "Search",
+                //"search": "",
+                //"searchPlaceholder": "Search",
                 "lengthMenu": "Rows _MENU_",
                 "paginate": {
                     "next": '<i class="icon ion-ios-arrow-forward"></i>',
@@ -22,6 +22,16 @@ app.component('serialNumberGroupList', {
             serverSide: true,
             paging: true,
             stateSave: true,
+            stateSaveCallback: function(settings, data) {
+                localStorage.setItem('SGDataTables_' + settings.sInstance, JSON.stringify(data));
+            },
+            stateLoadCallback: function(settings) {
+                var state_save_val = JSON.parse(localStorage.getItem('SGDataTables_' + settings.sInstance));
+                if (state_save_val) {
+                    $('#search_serial_number_group').val(state_save_val.search.search);
+                }
+                return JSON.parse(localStorage.getItem('SGDataTables_' + settings.sInstance));
+            },
             ordering: false,
             scrollY: table_scroll + "px",
             scrollCollapse: true,
@@ -43,15 +53,15 @@ app.component('serialNumberGroupList', {
                 { data: 'next_number', name: 'next_number' },
                 { data: 'segment', name: 'segment', searchable: false },
             ],
-            "infoCallback": function(settings, start, end, max, total, pre) {
-                $('#table_info').html('(' + max + ')')
+            infoCallback: function(settings, start, end, max, total, pre) {
+                $('#table_info').html(total)
+                $('.foot_info').html('Showing ' + start + ' to ' + end + ' of ' + max + ' entries')
             },
             rowCallback: function(row, data) {
                 $(row).addClass('highlight-row');
             }
         });
         $('.dataTables_length select').select2();
-        $('#search_serial_number_group').val(this.value);
 
         $scope.clear_search = function() {
             $('#search_serial_number_group').val('');
@@ -115,6 +125,9 @@ app.component('serialNumberGroupForm', {
                     self.switch_value = 'Active';
                 }
                 $scope.showCategoryinSegmentTab(self.serial_number_group.category_id);
+                $scope.showFinanceYear(self.serial_number_group.fy_id);
+                $scope.showBranchCode(self.serial_number_group.branch_id);
+                $scope.onSelectedState(self.serial_number_group.state_id);
                 $.each(self.serial_number_group.segments, function(index, value) {
                     $scope.getSegmentgroupSegment(value.id, index);
                 });
@@ -171,7 +184,6 @@ app.component('serialNumberGroupForm', {
                         $(".hidden_based_segment_" + index).css('display', 'block');
                         $(document).on('keyup', ".hidden_based_segment_" + index,
                             function() {
-                                console.log($(".hidden_based_segment_" + index).val());
                                 self.segmentValue = $(".hidden_based_segment_" + index).val();
                             });
                     } else if (data_type_id == 1141) {
@@ -190,21 +202,22 @@ app.component('serialNumberGroupForm', {
             }
         }
 
-        //GET SEGMENT VALUE
-        $scope.getSegmentValue = function(index) {
-
-        }
-
-        //SHOW BASED ORDER
-        self.test = [];
-        $scope.orderChange = function(index) {
-            if ($(".orderCheck_" + index).val()) {
-                self.test.push({ val: $(".orderCheck_" + index).val(), index: index });
-            } else {
-                self.test.pop({ val: $(".orderCheck_" + index).val(), index: index });
-            }
-            console.log(self.test.sort());
-        }
+        // //SHOW BASED ORDER
+        // test = [];
+        // $scope.orderChange = function(index) {
+        //     console.log(index, $(".orderCheck_" + index).val());
+        //     if ($(".orderCheck_" + index).val()) {
+        //         test.push($(".orderCheck_" + index).val());
+        //     } else {
+        //         var removeItem = $(".orderCheck_" + index).val();
+        //         console.log(removeItem);
+        //         var y = jQuery.grep(test, function(value) {
+        //             return value != removeItem;
+        //         });
+        //         // test.splice($(".orderCheck_" + index).val(), 1);
+        //     }
+        //     console.log(test);
+        // }
 
         /* Tab Funtion */
         $('.btn-nxt').on("click", function() {
@@ -235,7 +248,7 @@ app.component('serialNumberGroupForm', {
             $http.get(
                 get_branch_based_state_url + '/' + $id
             ).then(function(response) {
-                console.log(response);
+                // console.log(response);
                 self.branch_list = response.data.branch_list;
             });
         }
