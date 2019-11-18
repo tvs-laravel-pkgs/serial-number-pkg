@@ -50,7 +50,7 @@
                                                         <tr ng-repeat="(index, segment) in $ctrl.serial_number_segment">
                                                             <input type="hidden" ng-model="segment.id" name="segment[{{index}}][id]" value="{{segment.id}}">
                                                             <td>
-                                                                <input type="text" class="form-control type-sm required" ng-model="segment.name" name="segment[{{index}}][name]" placeholder="Enter Segment Name" maxlength="191" minlength="3" />
+                                                                <input type="text" class="form-control type-sm segment_name" ng-model="segment.name" name="segment[{{index}}][name]" placeholder="Enter Segment Name" />
                                                             </td>
                                                             <td>
                                                                 <md-select ng-model="segment.data_type_id" placeholder="Select Segment Type" data-md-container-class="selectdemoSelectHeader">
