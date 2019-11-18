@@ -9,7 +9,7 @@
                 </div><!-- Page Header Content -->
                 <div class="page-header-content title-block">
                     <h1 class="title"><b>{{$ctrl.action}} Serial Number Segment</b></h1>
-                    <p class="subtitle"><a href="#!/serial-number-pkg/serial-number-segment/list">Serial Number Segment List</a> / Form</p>
+                    <p class="subtitle"><a href="#!/serial-number-pkg/serial-number-segment/list">Serial Number Segment List</a> / {{$ctrl.action}}</p>
                 </div><!-- Page Header Content -->
             </div><!-- Page Header Content Left -->
         </div><!-- Page Header Inner -->
@@ -40,9 +40,9 @@
                                                 <table class="table table-form">
                                                     <thead>
                                                         <tr>
-                                                            <th>Segment Name</th>
-                                                            <th>Segment Type</th>
-                                                            <th>Active Status</th>
+                                                            <th>Segment Name <sup class="mandatory">*</sup></th>
+                                                            <th>Segment Type <sup class="mandatory">*</sup></th>
+                                                            <th>Active Status <sup class="mandatory">*</sup></th>
                                                             <th ng-show="$ctrl.action == 'Add'"></th>
                                                         </tr>
                                                     </thead>
@@ -50,7 +50,7 @@
                                                         <tr ng-repeat="(index, segment) in $ctrl.serial_number_segment">
                                                             <input type="hidden" ng-model="segment.id" name="segment[{{index}}][id]" value="{{segment.id}}">
                                                             <td>
-                                                                <input type="text" class="form-control type-sm required" ng-model="segment.name" name="segment[{{index}}][name]" placeholder="Enter Segment Name" maxlength="191" />
+                                                                <input type="text" class="form-control type-sm required" ng-model="segment.name" name="segment[{{index}}][name]" placeholder="Enter Segment Name" maxlength="191" minlength="3" />
                                                             </td>
                                                             <td>
                                                                 <md-select ng-model="segment.data_type_id" placeholder="Select Segment Type" data-md-container-class="selectdemoSelectHeader">
