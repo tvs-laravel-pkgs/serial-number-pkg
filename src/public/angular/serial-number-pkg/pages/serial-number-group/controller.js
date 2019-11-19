@@ -124,12 +124,16 @@ app.component('serialNumberGroupForm', {
                 } else {
                     self.switch_value = 'Active';
                 }
+
                 $scope.showCategoryinSegmentTab(self.serial_number_group.category_id);
                 $scope.showFinanceYear(self.serial_number_group.fy_id);
                 $scope.showBranchCode(self.serial_number_group.branch_id);
                 $scope.onSelectedState(self.serial_number_group.state_id);
                 $.each(self.serial_number_group.segments, function(index, value) {
                     $scope.getSegmentgroupSegment(value.id, index);
+                    if (value.data_type_id == 1140) {
+                        $(".segmentValue").text(value.pivot.value);
+                    }
                 });
             } else {
                 self.serial_number_group.segments = [];
