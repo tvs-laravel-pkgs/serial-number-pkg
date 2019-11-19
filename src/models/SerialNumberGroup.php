@@ -17,7 +17,7 @@ class SerialNumberGroup extends Model {
 		'fy_id',
 		'state_id',
 		'branch_id',
-		'length',
+		'len',
 		'starting_number',
 		'ending_number',
 		'next_number',

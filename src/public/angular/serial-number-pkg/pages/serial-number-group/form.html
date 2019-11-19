@@ -9,7 +9,7 @@
                 </div><!-- Page Header Content -->
                 <div class="page-header-content title-block">
                     <h1 class="title"><b>{{$ctrl.action}} Serial Number Group</b></h1>
-                    <p class="subtitle"><a href="#!/serial-number-pkg/serial-number-group/list">Serial Number Group List</a> / Form</p>
+                    <p class="subtitle"><a href="#!/serial-number-pkg/serial-number-group/list">Serial Number Group List</a> / {{$ctrl.action}}</p>
                 </div><!-- Page Header Content -->
             </div><!-- Page Header Content Left -->
         </div><!-- Page Header Inner -->
@@ -149,9 +149,9 @@
                                                 <table class="table table-form">
                                                     <thead>
                                                         <tr>
-                                                            <th>Segment</th>
-                                                            <th>Value</th>
-                                                            <th>Display Order</th>
+                                                            <th>Segment <sup class="mandatory">*</sup></th>
+                                                            <th>Value <sup class="mandatory">*</sup></th>
+                                                            <th>Display Order <sup class="mandatory">*</sup></th>
                                                             <th></th>
                                                         </tr>
                                                     </thead>
@@ -169,7 +169,7 @@
                                                                 <input type="hidden" name="segment[{{index}}][segment_id]" value='{{segment.pivot.segment_id}}' class="required">
                                                             </td>
                                                             <td>
-                                                                <input style="display: none;" type="text" ng-model="segment.pivot.value" class="form-control type-sm required hidden_based_segment_{{index}}" name="segment[{{index}}][value]" placeholder="Enter Value" ng-change="getSegmentValue(index)" />
+                                                                <input style="display: none;" type="text" ng-model="segment.pivot.value" class="form-control type-sm hidden_based_segment_{{index}} append_segVal" name="segment[{{index}}][value]" placeholder="Enter Value" ng-change="getSegmentValue(index)" />
                                                             </td>
                                                             <td>
                                                                 <input type="text" ng-model="segment.pivot.display_order" class="form-control type-sm required orderCheck_{{index}}" name="segment[{{index}}][display_order]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" ng-change="orderChange(index)" placeholder="Enter Display Order" />
@@ -188,9 +188,9 @@
                                                     </tfoot>
                                                 </table>
                                             </div><!-- Table Responsive -->
-                                            <h6 class="tab-pane-title">Preview : <span class="color-primary-light"> {{$ctrl.segmentValue}}{{$ctrl.financial_year}}{{$ctrl.state_code}}{{$ctrl.branch_code}}</span></h6>
+                                            <h6 class="tab-pane-title">Preview : <span class="color-primary-light segmentValue"> {{$ctrl.segmentValue}}</span><span class="color-primary-light">{{$ctrl.financial_year}}{{$ctrl.state_code}}{{$ctrl.branch_code}}</span></h6>
                                         </div><!-- Column -->
-                                        <div class="tab-pane-footer">
+                                        <div class=" tab-pane-footer">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <a class="btn btn-secondary btn-prev">Previous</a>

@@ -175,28 +175,41 @@ app.component('serialNumberGroupForm', {
 
         //GET VALUE BASED SEGMENT
         $scope.getSegmentgroupSegment = function(id, index) {
+            var required_remove = ".hidden_based_segment_" + index;
             if (id) {
                 $http.get(
                     get_segment_based_on_change_data_url + '/' + id
                 ).then(function(response) {
+                    // console.log(response);
                     var data_type_id = response.data.data_type_id;
                     if (data_type_id == 1140) {
                         $(".hidden_based_segment_" + index).css('display', 'block');
-                        $(document).on('keyup', ".hidden_based_segment_" + index,
-                            function() {
-                                self.segmentValue = $(".hidden_based_segment_" + index).val();
-                            });
+                        $(required_remove).addClass('required');
+                        $(document).on("input", ".append_segVal", function() {
+                            console.log("IN");
+                            var append_segVal = $(this).closest('tr').find('.append_segVal').val();
+                            if (append_segVal.length > 0) {
+                                $(".segmentValue").text(append_segVal);
+                            } else {
+                                $(".segmentValue").text('');
+                            }
+                            console.log(self.segmentValue);
+                        });
                     } else if (data_type_id == 1141) {
                         self.financial_year = self.finance_year_based_groupTab;
                         $(".hidden_based_segment_" + index).css('display', 'none');
+                        $(required_remove).removeClass('required');
                     } else if (data_type_id == 1142) {
                         self.state_code = self.state_based_groupTab;
                         $(".hidden_based_segment_" + index).css('display', 'none');
+                        $(required_remove).removeClass('required');
                     } else if (data_type_id == 1143) {
                         self.branch_code = self.branch_based_groupTab;
                         $(".hidden_based_segment_" + index).css('display', 'none');
+                        $(required_remove).removeClass('required');
                     } else {
                         $(".hidden_based_segment_" + index).css('display', 'none');
+                        $(required_remove).removeClass('required');
                     }
                 });
             }
