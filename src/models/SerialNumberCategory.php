@@ -18,23 +18,25 @@ class SerialNumberCategory extends Model {
 		return SerialNumberCategory::select('name', 'id')->where('company_id', Auth::user()->company_id)->get();
 	}
 
-	public static function createFromCollection($records) {
+	public static function createFromCollection($records, $company = null) {
 		foreach ($records as $key => $record_data) {
 			try {
 				if (!$record_data->company) {
 					continue;
 				}
-				$record = self::createFromObject($record_data);
+				$record = self::createFromObject($record_data, $company);
 			} catch (Exception $e) {
 				dd($e);
 			}
 		}
 	}
 
-	public static function createFromObject($record_data) {
+	public static function createFromObject($record_data, $company = null) {
 
 		$errors = [];
-		$company = Company::where('code', $record_data->company)->first();
+		if (!$company) {
+			$company = Company::where('code', $record_data->company)->first();
+		}
 		if (!$company) {
 			dump('Invalid Company : ' . $record_data->company);
 			return;

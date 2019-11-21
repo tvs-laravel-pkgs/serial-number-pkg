@@ -28,23 +28,25 @@ class SerialNumberGroup extends Model {
 		return $this->belongsToMany('Abs\SerialNumberPkg\SerialNumberSegment', 'serial_number_group_serial_number_segment', 'serial_number_group_id', 'segment_id')->withPivot(['value', 'display_order'])->orderBy('display_order', 'asc');
 	}
 
-	public static function createFromCollection($records) {
+	public static function createFromCollection($records, $company = null) {
 		foreach ($records as $key => $record_data) {
 			try {
 				if (!$record_data->company) {
 					continue;
 				}
-				$record = self::createFromObject($record_data);
+				$record = self::createFromObject($record_data, $company);
 			} catch (Exception $e) {
 				dd($e);
 			}
 		}
 	}
 
-	public static function createFromObject($record_data) {
+	public static function createFromObject($record_data, $company = null) {
 
 		$errors = [];
-		$company = Company::where('code', $record_data->company)->first();
+		if (!$company) {
+			$company = Company::where('code', $record_data->company)->first();
+		}
 		if (!$company) {
 			dump('Invalid Company : ' . $record_data->company);
 			return;
@@ -167,23 +169,25 @@ class SerialNumberGroup extends Model {
 		}
 	}
 
-	public static function mapSegments($records) {
+	public static function mapSegments($records, $company = null) {
 		foreach ($records as $key => $record_data) {
 			try {
 				if (!$record_data->company) {
 					continue;
 				}
-				$record = self::mapSegment($record_data);
+				$record = self::mapSegment($record_data, $company);
 			} catch (Exception $e) {
 				dd($e);
 			}
 		}
 	}
 
-	public static function mapSegment($record_data) {
+	public static function mapSegment($record_data, $company = null) {
 
 		$errors = [];
-		$company = Company::where('code', $record_data->company)->first();
+		if (!$company) {
+			$company = Company::where('code', $record_data->company)->first();
+		}
 		if (!$company) {
 			dump('Invalid Company : ' . $record_data->company);
 			return;
