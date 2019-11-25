@@ -11,6 +11,7 @@ class SerialNumberCategory extends Model {
 	protected $table = 'serial_number_categories';
 	protected $fillable = [
 		'name',
+		'company_id',
 		'created_by_id',
 	];
 
