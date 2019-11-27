@@ -24,7 +24,7 @@ class SerialNumberGroupController extends Controller {
 			->select(
 				'serial_number_groups.id',
 				'serial_number_categories.name as name',
-				DB::raw('IF((serial_number_groups.fy_id) IS NULL,"--",CONCAT(financial_years.from,"/",financial_years.to)) as finance_year'),
+				DB::raw('IF((serial_number_groups.fy_id) IS NULL,"--",CONCAT(financial_years.from,"/",financial_years.from+1)) as finance_year'),
 				DB::raw('IF((states.name) IS NULL,"--",states.name) as state'),
 				DB::raw('IF((outlets.name) IS NULL,"--",outlets.name) as branch'),
 				'serial_number_groups.starting_number',
