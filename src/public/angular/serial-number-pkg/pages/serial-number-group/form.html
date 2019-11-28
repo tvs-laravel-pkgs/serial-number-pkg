@@ -172,7 +172,7 @@
                                                                 <input style="display: none;" type="text" ng-model="segment.pivot.value" class="form-control type-sm hidden_based_segment_{{index}} append_segVal" name="segment[{{index}}][value]" placeholder="Enter Value" ng-change="getSegmentValue(index)" />
                                                             </td>
                                                             <td>
-                                                                <input type="text" ng-model="segment.pivot.display_order" class="form-control type-sm required orderCheck_{{index}}" name="segment[{{index}}][display_order]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" ng-change="orderChange(index)" placeholder="Enter Display Order" />
+                                                                <input type="text" ng-model="segment.pivot.display_order" class="form-control type-sm required1 orderCheck_{{index}}" name="segment[{{index}}][display_order]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" ng-change="orderChange(index)" placeholder="Enter Display Order" />
                                                             </td>
                                                             <td>
                                                                 <a href="javascript:;" ng-click="removeGroup(index)"><img class="img-responsive" src="./public/theme/img/table/cndn/delete.svg" alt="Delete" /></a>
