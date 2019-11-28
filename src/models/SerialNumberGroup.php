@@ -102,36 +102,55 @@ class SerialNumberGroup extends Model {
 	public static function generateNumber($category_id, $fy_id = NULL, $state_id, $branch_id) {
 		try {
 			$response = array();
-			$financial_year = FinancialYear::where('id', $fy_id)->first();
-			if (!$financial_year) {
-				$response['success'] = false;
-				$response['error'] = 'No Serial number found';
-				return $response;
+			if ($fy_id) {
+				$financial_year = FinancialYear::where('id', $fy_id)->first();
+				if (!$financial_year) {
+					$response['success'] = false;
+					$response['error'] = 'Fiancial Year Not Found';
+					return $response;
+				}
 			}
 
-			$state = State::where('id', $state_id)->first();
-			if (!$state) {
-				$response['success'] = false;
-				$response['error'] = 'No Serial number found';
-				return $response;
+			if ($state_id) {
+				$state = State::where('id', $state_id)->first();
+				if (!$state) {
+					$response['success'] = false;
+					$response['error'] = 'State not found';
+					return $response;
+				}
 			}
 
-			$branch = Outlet::where('id', $branch_id)->first();
-			if (!$branch) {
-				$response['success'] = false;
-				$response['error'] = 'No Serial number found';
-				return $response;
+			if ($branch_id) {
+				$branch = Outlet::where('id', $branch_id)->first();
+				if (!$branch) {
+					$response['success'] = false;
+					$response['error'] = 'Branch not found';
+					return $response;
+				}
 			}
 
-			$serial_number_group = self::where('category_id', $category_id)
-				->where('fy_id', $fy_id)
-				->where('state_id', $state_id)
-				->where('branch_id', $branch_id)
-				->where('company_id', Auth::user()->company_id)
+			$serial_number_group = self::where('category_id', $category_id);
+			if ($fy_id) {
+				$serial_number_group->where('fy_id', $fy_id);
+			} else {
+				$serial_number_group->whereNull('fy_id');
+			}
+			if ($state_id) {
+				$serial_number_group->where('state_id', $state_id);
+			} else {
+				$serial_number_group->whereNull('state_id');
+			}
+			if ($branch_id) {
+				$serial_number_group->where('branch_id', $branch_id);
+			} else {
+				$serial_number_group->whereNull('branch_id');
+			}
+			$serial_number_group = $serial_number_group->where('company_id', Auth::user()->company_id)
 				->first();
+
 			if (!$serial_number_group) {
 				$response['success'] = false;
-				$response['error'] = 'No Serial number found';
+				$response['error'] = 'No Serial number sequence found';
 				return $response;
 			}
 
