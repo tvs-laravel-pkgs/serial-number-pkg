@@ -145,11 +145,11 @@ class SerialNumberGroupController extends Controller {
 
 			//SEGMENT UNIQUE CHECK
 			if ($request->segment && !empty($request->segment)) {
-				$segments_group_segment = array_column($request->segment, 'segment_id');
-				$segments_group_segment_unique = array_unique($segments_group_segment);
-				if (count($segments_group_segment) != count($segments_group_segment_unique)) {
-					return response()->json(['success' => false, 'errors' => ['Segment name is already taken']]);
-				}
+				// $segments_group_segment = array_column($request->segment, 'segment_id');
+				// $segments_group_segment_unique = array_unique($segments_group_segment);
+				// if (count($segments_group_segment) != count($segments_group_segment_unique)) {
+				// 	return response()->json(['success' => false, 'errors' => ['Segment name is already taken']]);
+				// }
 			} else {
 				return response()->json(['success' => false, 'errors' => ['Segment name is Empty']]);
 			}
