@@ -17,7 +17,7 @@ class SngsnsU2 extends Migration {
 			$table->dropForeign('sng_snt_u');
 			$table->dropForeign('sng_su');
 			$table->dropUnique('sngsns_unique');
-			$table->foreign('serial_number_group_id', 'sng_snt_u')->references('id')->on('serial_number_types')->onDelete('CASCADE')->onUpdate('cascade');
+			$table->foreign('serial_number_group_id', 'sng_snt_u')->references('id')->on('serial_number_groups')->onDelete('CASCADE')->onUpdate('cascade');
 			$table->foreign('segment_id', 'sng_su')->references('id')->on('serial_number_segments')->onDelete('CASCADE')->onUpdate('cascade');
 		});
 
