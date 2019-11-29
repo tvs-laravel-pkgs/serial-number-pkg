@@ -103,7 +103,7 @@ class SerialNumberGroup extends Model {
 		try {
 			$response = array();
 			if ($fy_id) {
-				$financial_year = FinancialYear::where('id', $fy_id)->first();
+				$financial_year = FinancialYear::where('id', $fy_id)->where('company_id', Auth::user()->company_id)->first();
 				if (!$financial_year) {
 					$response['success'] = false;
 					$response['error'] = 'Fiancial Year Not Found';
@@ -121,7 +121,7 @@ class SerialNumberGroup extends Model {
 			}
 
 			if ($branch_id) {
-				$branch = Outlet::where('id', $branch_id)->first();
+				$branch = Outlet::where('id', $branch_id)->where('company_id', Auth::user()->company_id)->first();
 				if (!$branch) {
 					$response['success'] = false;
 					$response['error'] = 'Branch not found';
