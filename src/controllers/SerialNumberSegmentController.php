@@ -69,7 +69,7 @@ class SerialNumberSegmentController extends Controller {
 		// dd($request->all());
 		try {
 			if (!empty($request->segment)) {
-				foreach ($request->segment as $segments) {
+				foreach ($request->segment as $segment_key => $segments) {
 					$error_messages = [
 						'name.required' => 'Serial Number Segment Name is Required',
 						'name.unique' => 'Serial Number Segment Name:' . $segments['name'] . ' is already taken',
@@ -82,6 +82,15 @@ class SerialNumberSegmentController extends Controller {
 					], $error_messages);
 					if ($validator->fails()) {
 						return response()->json(['success' => false, 'errors' => $validator->errors()->all()]);
+					}
+
+					//DUPLICATION - SERIAL NUMBER SEGMENT
+					foreach ($request->segment as $search_key => $search_array) {
+						if ($search_array['name'] == $segments['name']) {
+							if ($search_key != $segment_key) {
+								return response()->json(['success' => false, 'errors' => ['Segment name already taken']]);
+							}
+						}
 					}
 				}
 			}
