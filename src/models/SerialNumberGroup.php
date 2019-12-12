@@ -99,7 +99,7 @@ class SerialNumberGroup extends Model {
 		return $record;
 	}
 
-	public static function generateNumber($category_id, $fy_id = NULL, $state_id, $branch_id) {
+	public static function generateNumber($category_id, $fy_id = NULL, $state_id, $branch_id, $sbu = null) {
 		try {
 			$response = array();
 			if ($fy_id) {
@@ -154,6 +154,12 @@ class SerialNumberGroup extends Model {
 				return $response;
 			}
 
+			if ($sbu) {
+				$sbu_name = $sbu->name;
+			} else {
+				$sbu_name = '';
+			}
+
 			//ADD DIGITS BEFORE NEXT NUMBER
 			$number_format = sprintf("%0" . $serial_number_group->len . "d", $serial_number_group->next_number);
 
@@ -169,6 +175,8 @@ class SerialNumberGroup extends Model {
 						$number .= $state->code;
 					} else if ($segment->data_type_id == 1143) {
 						$number .= $branch->code;
+					} else if ($segment->data_type_id == 1144) {
+						$number .= $sbu_name;
 					}
 				}
 			}
