@@ -19,7 +19,18 @@ class SerialNumberGroupController extends Controller {
 	public function __construct() {
 	}
 
-	public function getSerialNumberGroupList() {
+	public function getSerialNumberGroupFilter() {
+		$this->data['category_list'] = collect(SerialNumberCategory::getCategoryList())->prepend(['id' => '', 'name' => 'Select Category']);
+		$this->data['financial_year_list'] = collect(FinancialYear::getFinanceYearList())->prepend(['id' => '', 'code' => 'Select Financial Year']);
+		$this->data['state_list'] = collect(State::getStateList())->prepend(['id' => '', 'name' => 'Select State']);
+		$this->data['branch_list'] = [];
+
+		return response()->json($this->data);
+
+	}
+
+	public function getSerialNumberGroupList(Request $request) {
+		// dd($request->all());
 		$serial_number_group_list = SerialNumberGroup::withTrashed()
 			->select(
 				'serial_number_groups.id',
@@ -39,6 +50,26 @@ class SerialNumberGroupController extends Controller {
 			->leftJoin('outlets', 'outlets.id', 'serial_number_groups.branch_id')
 			->leftJoin('serial_number_group_serial_number_segment as sngsns', 'sngsns.serial_number_group_id', 'serial_number_groups.id')
 			->where('serial_number_groups.company_id', Auth::user()->company_id)
+			->where(function ($query) use ($request) {
+				if (!empty($request->category_id)) {
+					$query->where("serial_number_groups.category_id", $request->category_id);
+				}
+			})
+			->where(function ($query) use ($request) {
+				if (!empty($request->financial_year_id)) {
+					$query->where("serial_number_groups.fy_id", $request->financial_year_id);
+				}
+			})
+			->where(function ($query) use ($request) {
+				if (!empty($request->state_id)) {
+					$query->where("serial_number_groups.state_id", $request->state_id);
+				}
+			})
+			->where(function ($query) use ($request) {
+				if (!empty($request->branch_id)) {
+					$query->where("serial_number_groups.branch_id", $request->branch_id);
+				}
+			})
 			->orderby('serial_number_groups.id', 'desc')
 			->groupby('serial_number_groups.id');
 
@@ -84,8 +115,12 @@ class SerialNumberGroupController extends Controller {
 		return response()->json($this->data);
 	}
 
-	public function getBrancheBasedState($id) {
-		$this->data['branch_list'] = collect(State::getOutlet($id))->prepend(['id' => '', 'name' => 'Select Branch']);
+	public function getBrancheBasedState($id = NULL) {
+		if (!$id) {
+			$this->data['branch_list'] = [];
+		} else {
+			$this->data['branch_list'] = collect(State::getOutlet($id))->prepend(['id' => '', 'name' => 'Select Branch']);
+		}
 
 		return response()->json($this->data);
 	}

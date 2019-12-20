@@ -72,3 +72,76 @@
     </div>
 </div>
 <!-- Modal -->
+
+<div class="modal fade filter" id="filter" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close ripple" data-dismiss="modal" aria-label="Close"><i class="icon ion-md-close"></i></button>
+                <h5 class="modal-title" id="myModalLabel">Filter</h5>
+            </div><!-- Modal Header -->
+            <div class="modal-body">
+                <div class="modal-form mb-30">
+                    <div class="row modal-row">
+                        <div class="col-md-6">
+                            <div class="input-text form-group">
+                                <label>Type</label>
+                                <md-select ng-model="$ctrl.category_id" placeholder="Select Category" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedType($ctrl.category_id)">
+                                    <md-select-header class="demo-select-header ng-hide">
+                                        <input ng-model="searchCategory" type="search" placeholder="Search for a Category" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                    </md-select-header>
+                                    <md-optgroup label="Travel List">
+                                        <md-option ng-value="category.id" ng-repeat="category in $ctrl.category_list | filter:searchTravel">{{category.name}}</md-option>
+                                    </md-optgroup>
+                                </md-select>
+                                <input type="hidden" name="category_id" id="category_id" value="">
+                            </div><!-- Feild -->
+                        </div><!-- Column -->
+                        <div class="col-md-6">
+                            <div class="input-text form-group">
+                                <label>Financial Year</label>
+                                <md-select ng-model="$ctrl.financial_year_id" placeholder="Select Financial Year" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedFinancialYear($ctrl.financial_year_id)">
+                                    <md-select-header class="demo-select-header ng-hide">
+                                        <input ng-model="searchFinance" type="search" placeholder="Search for a Financial Year" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                    </md-select-header>
+                                    <md-optgroup label="Financial List">
+                                        <md-option ng-value="finance.id" ng-repeat="finance in $ctrl.financial_year_list | filter:searchTravel">{{finance.code}}</md-option>
+                                    </md-optgroup>
+                                </md-select>
+                                <input type="hidden" name="financial_year_id" id="financial_year_id" value="">
+                            </div><!-- Feild -->
+                        </div><!-- Column -->
+                        <div class="col-md-6">
+                            <div class="input-text form-group">
+                                <label>State</label>
+                                <md-select ng-model="$ctrl.state_id" placeholder="Select State" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedState($ctrl.state_id);$ctrl.branch_list='';$ctrl.branch_id=''">
+                                    <md-select-header class="demo-select-header ng-hide">
+                                        <input ng-model="searchType" type="search" placeholder="Search for a State" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                    </md-select-header>
+                                    <md-optgroup label="Satte List">
+                                        <md-option ng-value="state.id" ng-repeat="state in $ctrl.state_list | filter:searchTravel">{{state.name}}</md-option>
+                                    </md-optgroup>
+                                </md-select>
+                                <input type="hidden" name="state_id" id="state_id" value="">
+                            </div><!-- Feild -->
+                        </div><!-- Column -->
+                        <div class="col-md-6">
+                            <div class="input-text form-group">
+                                <label>Branch</label>
+                                <md-select ng-model="$ctrl.branch_id" placeholder="Select Branch" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedBranch($ctrl.branch_id)">
+                                    <md-select-header class="demo-select-header ng-hide">
+                                        <input ng-model="searchType" type="search" placeholder="Search for a Branch" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                    </md-select-header>
+                                    <md-optgroup label="Outlet List">
+                                        <md-option ng-value="outlet.id" ng-repeat="outlet in $ctrl.branch_list | filter:searchTravel">{{outlet.name}}</md-option>
+                                    </md-optgroup>
+                                </md-select>
+                                <input type="hidden" name="branch_id" id="branch_id" value="">
+                            </div><!-- Feild -->
+                        </div><!-- Column -->
+                    </div><!-- Row -->
+                </div><!-- Modal Form -->
+            </div><!-- Modal Body -->
+        </div><!-- Modal Content -->
+    </div><!-- Modal Dialog -->
+</div><!-- Modal Content -->

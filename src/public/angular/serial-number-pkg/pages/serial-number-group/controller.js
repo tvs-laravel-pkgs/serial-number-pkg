@@ -1,9 +1,19 @@
 app.component('serialNumberGroupList', {
     templateUrl: serial_number_group_list_template_url,
-    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location) {
+    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location, $mdSelect) {
         $scope.loading = true;
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        $http.get(
+            get_serial_number_group_filter_url
+        ).then(function (response) {
+            self.category_list = response.data.category_list;
+            self.financial_year_list = response.data.financial_year_list;
+            self.state_list = response.data.state_list;
+            self.branch_list = [];
+            $rootScope.loading = false;
+        });
+
         var table_scroll;
         table_scroll = $('.page-main-content').height() - 37;
         var dataTable = $('#serial_number_group').DataTable({
@@ -39,7 +49,12 @@ app.component('serialNumberGroupList', {
                 url: laravel_routes['getSerialNumberGroupList'],
                 type: "GET",
                 dataType: "json",
-                data: function(d) {},
+                data: function(d) {
+                    d.category_id = $('#category_id').val();
+                    d.financial_year_id = $('#financial_year_id').val();
+                    d.state_id = $('#state_id').val();
+                    d.branch_id = $('#branch_id').val();
+                },
             },
 
             columns: [
@@ -62,10 +77,50 @@ app.component('serialNumberGroupList', {
             }
         });
         $('.dataTables_length select').select2();
-
+        $('.modal').bind('click', function (event) {
+            if($('.md-select-menu-container').hasClass('md-active')){
+                $mdSelect.hide();
+            }
+        });
         $scope.clear_search = function() {
             $('#search_serial_number_group').val('');
             $('#serial_number_group').DataTable().search('').draw();
+        }
+
+        $scope.onSelectedType = function(selected_type) {
+            setTimeout(function() {
+                $('#category_id').val(selected_type);
+                dataTable.draw();
+            }, 900);
+        }
+        $scope.onSelectedFinancialYear = function(selected_financial_year) {
+            setTimeout(function() {
+                $('#financial_year_id').val(selected_financial_year);
+                dataTable.draw();
+            }, 900);
+        }
+        $scope.onSelectedBranch = function(selected_branch) {
+            setTimeout(function() {
+                $('#branch_id').val(selected_branch);
+                dataTable.draw();
+            }, 900);
+        }
+
+        //SHOW BRANCH BASED STATE
+        $scope.onSelectedState = function($id) {
+            setTimeout(function() {
+                if($id == "") {
+                   $('#branch_id').val(''); 
+                }
+                $('#state_id').val($id);
+                dataTable.draw();
+                $http.get(
+                    get_branch_based_state_url + '/' + $id
+                ).then(function(response) {
+                    // console.log(response);
+                    self.branch_list = response.data.branch_list;
+                });
+            }, 900);
         }
 
         var dataTables = $('#serial_number_group').dataTable();
