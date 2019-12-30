@@ -42,6 +42,7 @@ app.component('serialNumberGroupList', {
                 }
                 return JSON.parse(localStorage.getItem('SGDataTables_' + settings.sInstance));
             },
+            scrollX: true,
             ordering: false,
             scrollY: table_scroll + "px",
             scrollCollapse: true,
