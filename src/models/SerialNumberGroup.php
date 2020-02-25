@@ -5,7 +5,6 @@ use App\Company;
 use App\FinancialYear;
 use App\Outlet;
 use App\State;
-use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -103,7 +102,7 @@ class SerialNumberGroup extends Model {
 		try {
 			$response = array();
 			if ($fy_id) {
-				$financial_year = FinancialYear::where('id', $fy_id)->where('company_id', Auth::user()->company_id)->first();
+				$financial_year = FinancialYear::find($fy_id);
 				if (!$financial_year) {
 					$response['success'] = false;
 					$response['error'] = 'Fiancial Year Not Found';
@@ -121,7 +120,7 @@ class SerialNumberGroup extends Model {
 			}
 
 			if ($branch_id) {
-				$branch = Outlet::where('id', $branch_id)->where('company_id', Auth::user()->company_id)->first();
+				$branch = Outlet::find($branch_id);
 				if (!$branch) {
 					$response['success'] = false;
 					$response['error'] = 'Branch not found';
@@ -145,7 +144,7 @@ class SerialNumberGroup extends Model {
 			} else {
 				$serial_number_group->whereNull('branch_id');
 			}
-			$serial_number_group = $serial_number_group->where('company_id', Auth::user()->company_id)
+			$serial_number_group = $serial_number_group
 				->first();
 
 			if (!$serial_number_group) {
