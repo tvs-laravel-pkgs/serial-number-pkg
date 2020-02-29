@@ -99,6 +99,7 @@ class SerialNumberGroup extends Model {
 	}
 
 	public static function generateNumber($category_id, $fy_id = NULL, $state_id, $branch_id, $sbu = null) {
+		//dd($category_id, $fy_id, $state_id, $branch_id, $sbu);
 		try {
 			$response = array();
 			if ($fy_id) {
@@ -146,7 +147,6 @@ class SerialNumberGroup extends Model {
 			}
 			$serial_number_group = $serial_number_group
 				->first();
-
 			if (!$serial_number_group) {
 				$response['success'] = false;
 				$response['error'] = 'No Serial number sequence found';
