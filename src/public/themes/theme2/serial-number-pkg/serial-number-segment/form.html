@@ -1,0 +1,107 @@
+<!-- Content Wrap -->
+<div class="content-wrap">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div class="page-header-content-left">
+                <div class="page-header-content button-block">
+                    <a href="#!/serial-number-pkg/serial-number-segment/list" type="button" class="btn-back btn-img"><img class="img-responsive" src="./public/theme/img/content/previous.svg" alt="Back" /></a>
+                </div><!-- Page Header Content -->
+                <div class="page-header-content title-block">
+                    <h1 class="title"><b>{{$ctrl.action}} Serial Number Segment</b></h1>
+                    <p class="subtitle"><a href="#!/serial-number-pkg/serial-number-segment/list">Serial Number Segment List</a> / {{$ctrl.action}}</p>
+                </div><!-- Page Header Content -->
+            </div><!-- Page Header Content Left -->
+        </div><!-- Page Header Inner -->
+    </div><!-- Page Header -->
+    <!-- Page Main Content -->
+    <div class="page-main-content form-content type2" style="padding: 0;">
+        <form id="form" autocomplete="off">
+            <div class="page-tab-form pb-70">
+                <div class="tab-form-wrap">
+                    <div class="tab-form-header">
+                        <div class="tab-header">
+                            <!-- Filters -->
+                            <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
+                                <ul class="nav nav-pills cndn-tabs">
+                                    <li class="active"><a class="filter active" data-target="#serial-number-segment" data-toggle="tab" aria-expanded="true">Serial Number Segment</a></li>
+                                </ul>
+                            </div><!-- Filters -->
+                        </div><!-- Tab Header -->
+                    </div><!-- Tab Form Header -->
+                    <div class="tab-form-body">
+                        <div class="tab-content">
+                            <!-- TAB PANEL -->
+                            <div class="tab-pane fade in active" id="serial-number-segment" data-animation="fadeInUp" data-animation-delay="300">
+                                <div class="tab-pane-wrap">
+                                    <div class="row">
+                                        <div class="col-lg-8 col-md-10">
+                                            <div class="table-responsive">
+                                                <table class="table table-form">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Segment Name <sup class="mandatory">*</sup></th>
+                                                            <th>Segment Type <sup class="mandatory">*</sup></th>
+                                                            <th>Active Status <sup class="mandatory">*</sup></th>
+                                                            <th ng-show="$ctrl.action == 'Add'"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="(index, segment) in $ctrl.serial_number_segment">
+                                                            <input type="hidden" ng-model="segment.id" name="segment[{{index}}][id]" value="{{segment.id}}">
+                                                            <td>
+                                                                <input type="text" class="form-control type-sm segment_name" ng-model="segment.name" name="segment[{{index}}][name]" placeholder="Enter Segment Name" />
+                                                            </td>
+                                                            <td>
+                                                                <md-select ng-model="segment.data_type_id" placeholder="Select Segment Type" data-md-container-class="selectdemoSelectHeader">
+                                                                    <md-select-header class="demo-select-header ng-hide">
+                                                                        <input ng-model="searchType" type="search" placeholder="Search for a Segment Type" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                                    </md-select-header>
+                                                                    <md-optgroup label="Travel List">
+                                                                        <md-option ng-value="type.id" ng-repeat="type in $ctrl.type_list | filter:searchTravel">{{type.name}}</md-option>
+                                                                    </md-optgroup>
+                                                                </md-select>
+                                                                <input type="hidden" name="segment[{{index}}][data_type_id]" value='{{segment.data_type_id}}' class="required data_type_id">
+                                                            </td>
+                                                            <td>
+                                                                <div class="tab-switch">
+                                                                    <md-switch ng-model="segment.switch_value" aria-label="Switch {{index}}" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn type-sm">
+                                                                        {{ segment.switch_value }}
+                                                                    </md-switch>
+                                                                </div>
+                                                                <input type="hidden" name="segment[{{index}}][status]" value="{{segment.switch_value}}">
+                                                            </td>
+                                                            <td ng-show="$ctrl.action == 'Add'">
+                                                                <a href="javascript:;" ng-click="removeSegment(index,segment.id)"><img class="img-responsive" src="./public/theme/img/table/cndn/delete.svg" alt="Delete" /></a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="4" ng-show="$ctrl.action == 'Add'">
+                                                                <button type="button" class="btn btn-primary-light btn-square" ng-click="add_segment()">+ Add Segments</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                                <input type="hidden" name="segment_removal_id" id="segment_removal_id" value="">
+                                            </div><!-- Table Responsive -->
+                                        </div><!-- Column -->
+                                        <div class="tab-pane-footer">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <a href="#!/serial-number-pkg/serial-number-segment/list" class="btn btn-primary">Cancel</a>
+                                                    <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+                                                </div>
+                                            </div>
+                                        </div><!-- Tab Footer -->
+                                    </div><!-- Row -->
+                                </div><!-- Tab Pane Wrap -->
+                            </div><!-- Tabe Pane -->
+                        </div><!-- Tab Content -->
+                    </div><!-- Tab Form Body -->
+                </div><!-- Tab Form Wrap -->
+            </div><!-- Page Form -->
+        </form>
+    </div><!-- Page Main Content -->
+</div><!-- Content Wrap -->

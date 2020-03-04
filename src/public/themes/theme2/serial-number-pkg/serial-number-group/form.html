@@ -1,0 +1,210 @@
+<!-- Content Wrap -->
+<div class="content-wrap cndn-wrap">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div class="page-header-content-left">
+                <div class="page-header-content button-block">
+                    <a href="#!/serial-number-pkg/serial-number-group/list" type="button" class="btn-back btn-img"><img class="img-responsive" src="./public/theme/img/content/previous.svg" alt="Back" /></a>
+                </div><!-- Page Header Content -->
+                <div class="page-header-content title-block">
+                    <h1 class="title"><b>{{$ctrl.action}} Serial Number Group</b></h1>
+                    <p class="subtitle"><a href="#!/serial-number-pkg/serial-number-group/list">Serial Number Group List</a> / {{$ctrl.action}}</p>
+                </div><!-- Page Header Content -->
+            </div><!-- Page Header Content Left -->
+        </div><!-- Page Header Inner -->
+    </div><!-- Page Header -->
+    <!-- Page Main Content -->
+    <div class="page-main-content form-content type2">
+        <form id="form" autocomplete="off">
+            <input type="hidden" name="id" value="{{$ctrl.serial_number_group.id}}">
+            <div class="page-tab-form pb-70">
+                <div class="tab-form-wrap">
+                    <div class="tab-form-header">
+                        <div class="tab-header">
+                            <!-- Filters -->
+                            <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
+                                <ul class="nav nav-pills cndn-tabs">
+                                    <li class="active"><a class="filter active" data-target="#serial-number-group" data-toggle="tab" aria-expanded="true">Serial Number Group</a></li>
+                                    <li><a data-target="#segments" data-toggle="tab" aria-expanded="true" class="filter">Segments</a></li>
+                                </ul>
+                            </div><!-- Filters -->
+                        </div><!-- Tab Header -->
+                    </div><!-- Tab Form Header -->
+                    <div class="tab-form-body">
+                        <div class="tab-content">
+                            <!-- TAB PANEL -->
+                            <div class="tab-pane fade in active" id="serial-number-group" data-animation="fadeInUp" data-animation-delay="300">
+                                <div class="tab-pane-wrap">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>Type <sup class="mandatory">*</sup></label>
+                                                <md-select ng-model="$ctrl.serial_number_group.category_id" placeholder="Select Category" data-md-container-class="selectdemoSelectHeader" ng-change="showCategoryinSegmentTab($ctrl.serial_number_group.category_id)">
+                                                    <md-select-header class="demo-select-header ng-hide">
+                                                        <input ng-model="searchCategory" type="search" placeholder="Search for a Category" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                    </md-select-header>
+                                                    <md-optgroup label="Travel List">
+                                                        <md-option ng-value="category.id" ng-repeat="category in $ctrl.category_list | filter:searchTravel">{{category.name}}</md-option>
+                                                    </md-optgroup>
+                                                </md-select>
+                                                <input type="hidden" name="category_id" value='{{$ctrl.serial_number_group.category_id}}' class="required">
+                                            </div><!-- Feild -->
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>Financial Year</label>
+                                                <md-select ng-model="$ctrl.serial_number_group.fy_id" placeholder="Select Financial Year" data-md-container-class="selectdemoSelectHeader" ng-change="showFinanceYear($ctrl.serial_number_group.fy_id)">
+                                                    <md-select-header class="demo-select-header ng-hide">
+                                                        <input ng-model="searchFinance" type="search" placeholder="Search for a Financial Year" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                    </md-select-header>
+                                                    <md-optgroup label="Financial List">
+                                                        <md-option ng-value="finance.id" ng-repeat="finance in $ctrl.financial_year_list | filter:searchTravel">{{finance.code}}</md-option>
+                                                    </md-optgroup>
+                                                </md-select>
+                                                <input type="hidden" name="fy_id" value='{{$ctrl.serial_number_group.fy_id}}' class="">
+                                            </div><!-- Feild -->
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>State</label>
+                                                <md-select ng-model="$ctrl.serial_number_group.state_id" placeholder="Select State" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedState($ctrl.serial_number_group.state_id);$ctrl.serial_number_group.branch_id=''">
+                                                    <md-select-header class="demo-select-header ng-hide">
+                                                        <input ng-model="searchType" type="search" placeholder="Search for a State" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                    </md-select-header>
+                                                    <md-optgroup label="Satte List">
+                                                        <md-option ng-value="state.id" ng-repeat="state in $ctrl.state_list | filter:searchTravel">{{state.name}}</md-option>
+                                                    </md-optgroup>
+                                                </md-select>
+                                                <input type="hidden" name="state_id" value='{{$ctrl.serial_number_group.state_id}}' class="">
+                                            </div><!-- Feild -->
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>Branch</label>
+                                                <md-select ng-model="$ctrl.serial_number_group.branch_id" placeholder="Select Branch" data-md-container-class="selectdemoSelectHeader" ng-change="showBranchCode($ctrl.serial_number_group.branch_id)">
+                                                    <md-select-header class="demo-select-header ng-hide">
+                                                        <input ng-model="searchType" type="search" placeholder="Search for a Branch" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                    </md-select-header>
+                                                    <md-optgroup label="Outlet List">
+                                                        <md-option ng-value="outlet.id" ng-repeat="outlet in $ctrl.branch_list | filter:searchTravel">{{outlet.name}}</md-option>
+                                                    </md-optgroup>
+                                                </md-select>
+                                                <input type="hidden" name="branch_id" value='{{$ctrl.serial_number_group.branch_id}}' class="">
+                                            </div><!-- Feild -->
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>Starting Number <sup class="mandatory">*</sup></label>
+                                                <input type="text" class="form-control required" ng-model="$ctrl.serial_number_group.starting_number" name="starting_number" id="starting_number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Enter Starting Number" />
+                                            </div><!-- Feild -->
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>Ending Number <sup class="mandatory">*</sup></label>
+                                                <input type="text" class="form-control required" ng-model="$ctrl.serial_number_group.ending_number" name="ending_number" id="ending_number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Enter Ending Number" />
+                                            </div><!-- Feild -->
+                                            <span class="ending_number_error"></span>
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>Length <sup class="mandatory">*</sup></label>
+                                                <input type="text" class="form-control required" ng-model="$ctrl.serial_number_group.len" name="len" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Enter Length" />
+                                            </div><!-- Feild -->
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>Next Number<sup class="mandatory">*</sup></label>
+                                                <input type="text" class="form-control required" ng-model="$ctrl.serial_number_group.next_number" name="next_number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Enter Next" />
+                                            </div><!-- Feild -->
+                                            <span class="next_number_error"></span>
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>Active Status <sup class="mandatory">*</sup></label>
+                                                <div class="tab-switch">
+                                                    <md-switch ng-model="$ctrl.switch_value" aria-label="Switch 1" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn">
+                                                        {{ $ctrl.switch_value }}
+                                                    </md-switch>
+                                                    <input type="hidden" name="status" value="{{$ctrl.switch_value}}">
+                                                </div>
+                                            </div><!-- Form Group -->
+                                        </div><!-- Row -->
+                                        <div class="tab-pane-footer">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <a class="btn btn-primary btn-nxt">Next</a>
+                                                </div>
+                                            </div>
+                                        </div><!-- Tab Footer -->
+                                    </div><!-- Row -->
+                                </div><!-- Tab Pane Wrap -->
+                            </div><!-- Tabe Pane -->
+                            <div class="tab-pane fade" id="segments" data-animation="fadeInUp" data-animation-delay="300">
+                                <div class="tab-pane-wrap">
+                                    <div class="row">
+                                        <div class="col-lg-8 col-md-10">
+                                            <h6 class="tab-pane-title">Serial Number Group : <span class="color-primary-light">{{$ctrl.category_name_based_groupTab}}</span></h6>
+                                            <div class="table-responsive">
+                                                <table class="table table-form">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Segment <sup class="mandatory">*</sup></th>
+                                                            <th>Value <sup class="mandatory">*</sup></th>
+                                                            <th>Display Order <sup class="mandatory">*</sup></th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="(index, segment) in $ctrl.serial_number_group.segments">
+                                                            <td>
+                                                                <md-select ng-model="segment.pivot.segment_id" placeholder="Select Type" data-md-container-class="selectdemoSelectHeader" ng-change="getSegmentgroupSegment(segment.pivot.segment_id,index)">
+                                                                    <md-select-header class="demo-select-header ng-hide">
+                                                                        <input ng-model="searchType" type="search" placeholder="Search for a Type" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                                    </md-select-header>
+                                                                    <md-optgroup label="Type List">
+                                                                        <md-option ng-value="type.id" ng-repeat="type in $ctrl.type_list | filter:searchTravel">{{type.name}}</md-option>
+                                                                    </md-optgroup>
+                                                                </md-select>
+                                                                <input type="hidden" name="segment[{{index}}][segment_id]" value='{{segment.pivot.segment_id}}' class="required">
+                                                            </td>
+                                                            <td>
+                                                                <input style="display: none;" type="text" ng-model="segment.pivot.value" class="form-control type-sm hidden_based_segment_{{index}} append_segVal" name="segment[{{index}}][value]" placeholder="Enter Value" ng-change="getSegmentValue(index)" />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" ng-model="segment.pivot.display_order" class="form-control type-sm required1 orderCheck_{{index}}" name="segment[{{index}}][display_order]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" ng-change="orderChange(index)" placeholder="Enter Display Order"  required="required" />
+                                                            </td>
+                                                            <td>
+                                                                <a href="javascript:;" ng-click="removeGroup(index)"><img class="img-responsive" src="./public/theme/img/table/cndn/delete.svg" alt="Delete" /></a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="4">
+                                                                <button type="button" class="btn btn-primary-light btn-square" ng-click="add_group()">+ Add Sub Category</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div><!-- Table Responsive -->
+                                            <!-- <h6 class="tab-pane-title">Preview : <span class="color-primary-light segmentValue"> {{$ctrl.segmentValue}}</span><span class="color-primary-light">{{$ctrl.financial_year}}{{$ctrl.state_code}}{{$ctrl.branch_code}}</span></h6> -->
+                                        </div><!-- Column -->
+                                        <div class=" tab-pane-footer">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <a class="btn btn-secondary btn-prev">Previous</a>
+                                                    <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+                                                </div>
+                                            </div>
+                                        </div><!-- Tab Footer -->
+                                    </div><!-- Row -->
+                                </div><!-- Tab Pane Wrap -->
+                            </div><!-- Tabe Pane -->
+                        </div><!-- Tab Content -->
+                    </div><!-- Tab Form Body -->
+                </div><!-- Tab Form Wrap -->
+            </div><!-- Page Form -->
+        </form>
+    </div><!-- Page Main Content -->
+</div><!-- Content Wrap -->
