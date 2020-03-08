@@ -28,6 +28,6 @@ class SerialNumberPkgServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	public function boot() {
-		// $this->app->make('Abs\Basic\API\AuthController');
+		// $this->app->make('Abs\BasicPkg\API\AuthController');
 	}
 }
