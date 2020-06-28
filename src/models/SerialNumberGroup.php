@@ -98,7 +98,7 @@ class SerialNumberGroup extends Model {
 		return $record;
 	}
 
-	public static function generateNumber($category_id, $fy_id = NULL, $state_id, $branch_id, $sbu = null) {
+	public static function generateNumber($category_id, $fy_id = NULL, $state_id = NULL, $branch_id = NULL, $sbu = null) {
 		//dd($category_id, $fy_id, $state_id, $branch_id, $sbu);
 		try {
 			$response = array();
