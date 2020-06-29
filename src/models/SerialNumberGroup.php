@@ -106,6 +106,7 @@ class SerialNumberGroup extends Model {
 				$financial_year = FinancialYear::find($fy_id);
 				if (!$financial_year) {
 					$response['success'] = false;
+					$response['errors'] = ['Fiancial Year Not Found'];
 					$response['error'] = 'Fiancial Year Not Found';
 					return $response;
 				}
@@ -115,6 +116,7 @@ class SerialNumberGroup extends Model {
 				$state = State::where('id', $state_id)->first();
 				if (!$state) {
 					$response['success'] = false;
+					$response['errors'] = ['State not found'];
 					$response['error'] = 'State not found';
 					return $response;
 				}
@@ -124,6 +126,7 @@ class SerialNumberGroup extends Model {
 				$branch = Outlet::find($branch_id);
 				if (!$branch) {
 					$response['success'] = false;
+					$response['errors'] = ['Branch not found'];
 					$response['error'] = 'Branch not found';
 					return $response;
 				}
@@ -149,6 +152,7 @@ class SerialNumberGroup extends Model {
 				->first();
 			if (!$serial_number_group) {
 				$response['success'] = false;
+				$response['errors'] = ['No Serial number sequence found'];
 				$response['error'] = 'No Serial number sequence found';
 				return $response;
 			}
@@ -190,8 +194,14 @@ class SerialNumberGroup extends Model {
 			$response['number'] = $serial_number;
 			return $response;
 
-		} catch (Exception $e) {
-			dd($e);
+		} catch (\Exception $e) {
+			return [
+				'success' => false,
+				'error' => 'Error:' . $e->getMessage() . '. Line:' . $e->getLine() . '. File:' . $e->getFile();
+				'errors' => [
+					'Error:' . $e->getMessage() . '. Line:' . $e->getLine() . '. File:' . $e->getFile(),
+				];
+			]
 		}
 	}
 
