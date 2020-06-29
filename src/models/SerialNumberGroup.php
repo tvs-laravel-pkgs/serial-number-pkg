@@ -197,7 +197,7 @@ class SerialNumberGroup extends Model {
 		} catch (\Exception $e) {
 			return [
 				'success' => false,
-				'error' => 'Error:' . $e->getMessage() . '. Line:' . $e->getLine() . '. File:' . $e->getFile();
+				'error' => 'Error:' . $e->getMessage() . '. Line:' . $e->getLine() . '. File:' . $e->getFile(),
 				'errors' => [
 					'Error:' . $e->getMessage() . '. Line:' . $e->getLine() . '. File:' . $e->getFile(),
 				];
