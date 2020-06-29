@@ -200,8 +200,8 @@ class SerialNumberGroup extends Model {
 				'error' => 'Error:' . $e->getMessage() . '. Line:' . $e->getLine() . '. File:' . $e->getFile(),
 				'errors' => [
 					'Error:' . $e->getMessage() . '. Line:' . $e->getLine() . '. File:' . $e->getFile(),
-				];
-			]
+				],
+			];
 		}
 	}
 
