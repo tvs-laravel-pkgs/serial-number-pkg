@@ -165,7 +165,7 @@ class SerialNumberGroup extends Model {
 				$serial_number_group->whereNull('branch_id');
 			}
 			//ADDED FOR CN/DN
-			if ($sbu_id) {
+			if ($sbu) {
 				$serial_number_group->where('sbu_id', $sbu->id);
 			}
 			//END
