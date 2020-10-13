@@ -143,6 +143,9 @@ class SerialNumberGroup extends Model {
 					$response['error'] = 'Business not found';
 					return $response;
 				}
+				$business_name = $business->name;
+			} else {
+				$business_name = '';
 			}
 
 			$serial_number_group = self::where('category_id', $category_id);
@@ -186,12 +189,6 @@ class SerialNumberGroup extends Model {
 				$sbu_name = '';
 			}
 
-			if ($business) {
-				$business_name = $business->name;
-			} else {
-				$business_name = '';
-			}
-
 			//ADD DIGITS BEFORE NEXT NUMBER
 			$number_format = sprintf("%0" . $serial_number_group->len . "d", $serial_number_group->next_number);
 
@@ -210,7 +207,8 @@ class SerialNumberGroup extends Model {
 					} else if ($segment->data_type_id == 1144) {
 						if ($sbu_name) {
 							$number .= $sbu_name;
-						} elseif ($business_name) {
+						}
+						if ($business_name) {
 							$number .= $business_name;
 						}
 					}
