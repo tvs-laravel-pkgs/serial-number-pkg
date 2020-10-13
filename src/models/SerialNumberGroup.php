@@ -1,6 +1,7 @@
 <?php
 
 namespace Abs\SerialNumberPkg;
+use App\Business;
 use App\Company;
 use App\FinancialYear;
 use App\Outlet;
@@ -16,6 +17,8 @@ class SerialNumberGroup extends Model {
 		'fy_id',
 		'state_id',
 		'branch_id',
+		'sbu_id',
+		'business_id',
 		'len',
 		'starting_number',
 		'ending_number',
@@ -98,8 +101,8 @@ class SerialNumberGroup extends Model {
 		return $record;
 	}
 
-	public static function generateNumber($category_id, $fy_id = NULL, $state_id = NULL, $branch_id = NULL, $sbu = null) {
-		//dd($category_id, $fy_id, $state_id, $branch_id, $sbu);
+	public static function generateNumber($category_id, $fy_id = NULL, $state_id = NULL, $branch_id = NULL, $sbu = NULL, $business_id = NULL) {
+		// dd($category_id, $fy_id, $state_id, $branch_id, $sbu, $business_id);
 		try {
 			$response = array();
 			if ($fy_id) {
@@ -132,6 +135,16 @@ class SerialNumberGroup extends Model {
 				}
 			}
 
+			if ($business_id) {
+				$business = Business::find($business_id);
+				if (!$business) {
+					$response['success'] = false;
+					$response['errors'] = ['Business not found'];
+					$response['error'] = 'Business not found';
+					return $response;
+				}
+			}
+
 			$serial_number_group = self::where('category_id', $category_id);
 			if ($fy_id) {
 				$serial_number_group->where('fy_id', $fy_id);
@@ -148,6 +161,16 @@ class SerialNumberGroup extends Model {
 			} else {
 				$serial_number_group->whereNull('branch_id');
 			}
+			//ADDED FOR CN/DN
+			if ($sbu) {
+				$serial_number_group->where('sbu_id', $sbu->id);
+			}
+			//END
+			//ADDED FOR CN/DN
+			if ($business_id) {
+				$serial_number_group->where('business_id', $business_id);
+			}
+			//END
 			$serial_number_group = $serial_number_group
 				->first();
 			if (!$serial_number_group) {
@@ -161,6 +184,12 @@ class SerialNumberGroup extends Model {
 				$sbu_name = $sbu->name;
 			} else {
 				$sbu_name = '';
+			}
+
+			if ($business) {
+				$business_name = $business->name;
+			} else {
+				$business_name = '';
 			}
 
 			//ADD DIGITS BEFORE NEXT NUMBER
@@ -179,7 +208,11 @@ class SerialNumberGroup extends Model {
 					} else if ($segment->data_type_id == 1143) {
 						$number .= $branch->code;
 					} else if ($segment->data_type_id == 1144) {
-						$number .= $sbu_name;
+						if ($sbu_name) {
+							$number .= $sbu_name;
+						} elseif ($business_name) {
+							$number .= $business_name;
+						}
 					}
 				}
 			}

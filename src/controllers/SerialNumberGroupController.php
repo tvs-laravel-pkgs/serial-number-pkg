@@ -5,7 +5,10 @@ use Abs\SerialNumberPkg\FinancialYear;
 use Abs\SerialNumberPkg\SerialNumberCategory;
 use Abs\SerialNumberPkg\SerialNumberGroup;
 use Abs\SerialNumberPkg\SerialNumberSegment;
+use App\Business;
 use App\Http\Controllers\Controller;
+use App\Outlet;
+use App\Sbu;
 use App\State;
 use Auth;
 use Carbon\Carbon;
@@ -24,6 +27,8 @@ class SerialNumberGroupController extends Controller {
 		$this->data['financial_year_list'] = collect(FinancialYear::getFinanceYearList())->prepend(['id' => '', 'code' => 'Select Financial Year']);
 		$this->data['state_list'] = collect(State::getStateList())->prepend(['id' => '', 'name' => 'Select State']);
 		$this->data['branch_list'] = [];
+		$this->data['business_list'] = collect(Business::getList())->prepend(['id' => '', 'name' => 'Select Business']);
+		$this->data['sbu_list'] = collect(Sbu::getList())->prepend(['id' => '', 'name' => 'Select SBU']);
 
 		return response()->json($this->data);
 
@@ -38,6 +43,8 @@ class SerialNumberGroupController extends Controller {
 				DB::raw('IF((serial_number_groups.fy_id) IS NULL,"--",CONCAT(financial_years.from,"/",financial_years.from+1)) as finance_year'),
 				DB::raw('IF((states.name) IS NULL,"--",states.name) as state'),
 				DB::raw('IF((outlets.name) IS NULL,"--",outlets.name) as branch'),
+				DB::raw('IF((sbus.name) IS NULL,"--",sbus.name) as sbu'),
+				DB::raw('IF((businesses.name) IS NULL,"--",businesses.name) as business'),
 				'serial_number_groups.starting_number',
 				'serial_number_groups.ending_number',
 				'serial_number_groups.next_number',
@@ -48,6 +55,8 @@ class SerialNumberGroupController extends Controller {
 			->leftJoin('financial_years', 'financial_years.id', 'serial_number_groups.fy_id')
 			->leftJoin('states', 'states.id', 'serial_number_groups.state_id')
 			->leftJoin('outlets', 'outlets.id', 'serial_number_groups.branch_id')
+			->leftJoin('sbus', 'sbus.id', 'serial_number_groups.sbu_id')
+			->leftJoin('businesses', 'businesses.id', 'serial_number_groups.business_id')
 			->leftJoin('serial_number_group_serial_number_segment as sngsns', 'sngsns.serial_number_group_id', 'serial_number_groups.id')
 			->where('serial_number_groups.company_id', Auth::user()->company_id)
 			->where(function ($query) use ($request) {
@@ -68,6 +77,16 @@ class SerialNumberGroupController extends Controller {
 			->where(function ($query) use ($request) {
 				if (!empty($request->branch_id)) {
 					$query->where("serial_number_groups.branch_id", $request->branch_id);
+				}
+			})
+			->where(function ($query) use ($request) {
+				if (!empty($request->sbu_id)) {
+					$query->where("serial_number_groups.sbu_id", $request->sbu_id);
+				}
+			})
+			->where(function ($query) use ($request) {
+				if (!empty($request->business_id)) {
+					$query->where("serial_number_groups.business_id", $request->business_id);
 				}
 			})
 			->orderby('serial_number_groups.id', 'desc')
@@ -107,6 +126,8 @@ class SerialNumberGroupController extends Controller {
 		}
 		$this->data['category_list'] = collect(SerialNumberCategory::getCategoryList())->prepend(['id' => '', 'name' => 'Select Category']);
 		$this->data['state_list'] = collect(State::getStateList())->prepend(['id' => '', 'name' => 'Select State']);
+		$this->data['business_list'] = collect(Business::getList())->prepend(['id' => '', 'name' => 'Select Business']);
+		$this->data['sbu_list'] = collect(Sbu::getList())->prepend(['id' => '', 'name' => 'Select SBU']);
 		$this->data['type_list'] = collect(SerialNumberSegment::getSegmentList())->prepend(['id' => '', 'name' => 'Select Type']);
 		$this->data['financial_year_list'] = collect(FinancialYear::getFinanceYearList())->prepend(['id' => '', 'code' => 'Select Financial Year']);
 		$this->data['serial_number_group'] = $serial_number_group;
@@ -123,6 +144,10 @@ class SerialNumberGroupController extends Controller {
 		}
 
 		return response()->json($this->data);
+	}
+
+	public function getSbuBasedBranch($id = NULL) {
+		return Outlet::getSbuBasedBranch($id);
 	}
 
 	public function getSegmentBasedId($id) {
@@ -155,19 +180,25 @@ class SerialNumberGroupController extends Controller {
 			$validator = Validator::make($request->all(), [
 				'category_id' => [
 					'required',
-					'unique:serial_number_groups,category_id,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',fy_id,' . $request->fy_id . ',state_id,' . $request->state_id . ',branch_id,' . $request->branch_id,
+					'unique:serial_number_groups,category_id,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',fy_id,' . $request->fy_id . ',state_id,' . $request->state_id . ',branch_id,' . $request->branch_id . ',business_id,' . $request->business_id . ',sbu_id,' . $request->sbu_id,
 				],
 				'fy_id' => [
 					// 'required',
-					'unique:serial_number_groups,fy_id,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',category_id,' . $request->category_id . ',state_id,' . $request->state_id . ',branch_id,' . $request->branch_id,
+					'unique:serial_number_groups,fy_id,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',category_id,' . $request->category_id . ',state_id,' . $request->state_id . ',branch_id,' . $request->branch_id . ',business_id,' . $request->business_id . ',sbu_id,' . $request->sbu_id,
 				],
 				'state_id' => [
 					// 'required',
-					'unique:serial_number_groups,state_id,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',category_id,' . $request->category_id . ',fy_id,' . $request->fy_id . ',branch_id,' . $request->branch_id,
+					'unique:serial_number_groups,state_id,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',category_id,' . $request->category_id . ',fy_id,' . $request->fy_id . ',branch_id,' . $request->branch_id . ',business_id,' . $request->business_id . ',sbu_id,' . $request->sbu_id,
 				],
 				'branch_id' => [
 					// 'required',
-					'unique:serial_number_groups,branch_id,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',category_id,' . $request->category_id . ',state_id,' . $request->state_id . ',fy_id,' . $request->fy_id,
+					'unique:serial_number_groups,branch_id,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',category_id,' . $request->category_id . ',state_id,' . $request->state_id . ',fy_id,' . $request->fy_id . ',business_id,' . $request->business_id . ',sbu_id,' . $request->sbu_id,
+				],
+				'sbu_id' => [
+					'unique:serial_number_groups,sbu_id,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',category_id,' . $request->category_id . ',state_id,' . $request->state_id . ',fy_id,' . $request->fy_id . ',branch_id,' . $request->branch_id . ',business_id,' . $request->business_id,
+				],
+				'business_id' => [
+					'unique:serial_number_groups,business_id,' . $request->id . ',id,company_id,' . Auth::user()->company_id . ',category_id,' . $request->category_id . ',state_id,' . $request->state_id . ',fy_id,' . $request->fy_id . ',branch_id,' . $request->branch_id . ',sbu_id,' . $request->sbu_id,
 				],
 				'starting_number' => 'required',
 				'ending_number' => 'required',

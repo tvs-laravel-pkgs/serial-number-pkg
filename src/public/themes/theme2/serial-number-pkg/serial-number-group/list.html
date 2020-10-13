@@ -42,6 +42,8 @@
                                 <th>Financial Year</th>
                                 <th>State</th>
                                 <th>Branch</th>
+                                <th>Business</th>
+                                <th>SBU</th>
                                 <th>Starting Number</th>
                                 <th>Ending Number</th>
                                 <th>Next Number</th>
@@ -72,7 +74,6 @@
     </div>
 </div>
 <!-- Modal -->
-
 <div class="modal fade filter" id="filter" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -114,7 +115,7 @@
                         <div class="col-md-6">
                             <div class="input-text form-group">
                                 <label>State</label>
-                                <md-select ng-model="$ctrl.state_id" placeholder="Select State" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedState($ctrl.state_id);$ctrl.branch_list='';$ctrl.branch_id=''">
+                                <md-select ng-model="$ctrl.state_id" placeholder="Select State" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedState($ctrl.state_id);$ctrl.branch_list='';$ctrl.branch_id='';$ctrl.sbu_list='';$ctrl.sbu_id=''">
                                     <md-select-header class="demo-select-header ng-hide">
                                         <input ng-model="searchType" type="search" placeholder="Search for a State" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                     </md-select-header>
@@ -128,7 +129,7 @@
                         <div class="col-md-6">
                             <div class="input-text form-group">
                                 <label>Branch</label>
-                                <md-select ng-model="$ctrl.branch_id" placeholder="Select Branch" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedBranch($ctrl.branch_id)">
+                                <md-select ng-model="$ctrl.branch_id" placeholder="Select Branch" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedBranch($ctrl.branch_id);$ctrl.sbu_list='';$ctrl.sbu_id=''">
                                     <md-select-header class="demo-select-header ng-hide">
                                         <input ng-model="searchType" type="search" placeholder="Search for a Branch" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                     </md-select-header>
@@ -139,6 +140,39 @@
                                 <input type="hidden" name="branch_id" id="branch_id" value="">
                             </div><!-- Feild -->
                         </div><!-- Column -->
+                        <div class="col-md-6">
+                            <div class="input-text form-group">
+                                <label>Business</label>
+                                <md-select ng-model="$ctrl.business_id" placeholder="Select Business" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedSbu($ctrl.sbu_id)">
+                                    <md-select-header class="demo-select-header ng-hide">
+                                        <input ng-model="searchType" type="search" placeholder="Search for a Business" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                    </md-select-header>
+                                    <md-optgroup label="Business List">
+                                        <md-option ng-value="business.id" ng-repeat="business in $ctrl.business_list | filter:searchTravel">{{business.name}}</md-option>
+                                    </md-optgroup>
+                                </md-select>
+                                <input type="hidden" name="business_id" id="business_id" value="">
+                            </div><!-- Feild -->
+                        </div><!-- Column -->
+                        <div class="col-md-6">
+                            <div class="input-text form-group">
+                                <label>SBU</label>
+                                <md-select ng-model="$ctrl.sbu_id" placeholder="Select SBU" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedSbu($ctrl.sbu_id)">
+                                    <md-select-header class="demo-select-header ng-hide">
+                                        <input ng-model="searchType" type="search" placeholder="Search for a SBU" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                    </md-select-header>
+                                    <md-optgroup label="SBU List">
+                                        <md-option ng-value="sbu.id" ng-repeat="sbu in $ctrl.sbu_list | filter:searchTravel">{{sbu.name}}</md-option>
+                                    </md-optgroup>
+                                </md-select>
+                                <input type="hidden" name="sbu_id" id="sbu_id" value="">
+                            </div><!-- Feild -->
+                        </div><!-- Column -->
+                    </div><!-- Row -->
+                    <div class="row modal-row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-rose" ng-click="reset_filter(); $ctrl.category_id='';$ctrl.financial_year_id='';$ctrl.state_id='';$ctrl.business_id=''; $ctrl.branch_id='';$ctrl.sbu_id=''">Reset Filter</button>
+                        </div>
                     </div><!-- Row -->
                 </div><!-- Modal Form -->
             </div><!-- Modal Body -->

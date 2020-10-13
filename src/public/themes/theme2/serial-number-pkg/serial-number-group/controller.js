@@ -55,6 +55,7 @@ app.component('serialNumberGroupList', {
                     d.financial_year_id = $('#financial_year_id').val();
                     d.state_id = $('#state_id').val();
                     d.branch_id = $('#branch_id').val();
+                    d.sbu_id = $('#sbu_id').val();
                 },
             },
 
@@ -64,6 +65,8 @@ app.component('serialNumberGroupList', {
                 { data: 'finance_year', name: 'financial_years.name', searchable: false },
                 { data: 'state', name: 'states.name' },
                 { data: 'branch', name: 'outlets.name' },
+                { data: 'business', name: 'businesses.name' },
+                { data: 'sbu', name: 'sbus.name' },
                 { data: 'starting_number', name: 'starting_number' },
                 { data: 'ending_number', name: 'ending_number' },
                 { data: 'next_number', name: 'next_number' },
@@ -106,6 +109,18 @@ app.component('serialNumberGroupList', {
                 dataTable.draw();
             }, 900);
         }
+        $scope.onSelectedSbu = function(selected_sbu) {
+            setTimeout(function() {
+                $('#sbu_id').val(selected_sbu);
+                dataTable.draw();
+            }, 900);
+        }
+        $scope.onSelectedBusiness = function(selected_business) {
+            setTimeout(function() {
+                $('#business_id').val(selected_business);
+                dataTable.draw();
+            }, 900);
+        }
 
         //SHOW BRANCH BASED STATE
         $scope.onSelectedState = function($id) {
@@ -120,6 +135,23 @@ app.component('serialNumberGroupList', {
                 ).then(function(response) {
                     // console.log(response);
                     self.branch_list = response.data.branch_list;
+                });
+            }, 900);
+        }
+
+        //SHOW SBU BASED BRANCH
+        $scope.onSelectedBranch = function($id) {
+            setTimeout(function() {
+                if ($id == "") {
+                    $('#sbu_id').val('');
+                }
+                $('#branch_id').val($id);
+                dataTable.draw();
+                $http.get(
+                    get_sbu_based_branch_url + '/' + $id
+                ).then(function(response) {
+                    console.log(response);
+                    self.sbu_list = response.data.sbu_list;
                 });
             }, 900);
         }
@@ -151,6 +183,16 @@ app.component('serialNumberGroupList', {
                 }
             });
         }
+
+        $scope.reset_filter = function() {
+            $('#category_id').val('');
+            $('#financial_year_id').val('');
+            $('#state_id').val('');
+            $('#branch_id').val('');
+            $('#sbu_id').val('');
+            $('#business_id').val('');
+            dataTable.draw();
+        }
         $rootScope.loading = false;
     }
 });
@@ -171,6 +213,8 @@ app.component('serialNumberGroupForm', {
             self.category_list = response.data.category_list;
             self.type_list = response.data.type_list;
             self.state_list = response.data.state_list;
+            self.business_list = response.data.business_list;
+            self.sbu_list = response.data.sbu_list;
             self.financial_year_list = response.data.financial_year_list;
             self.action = response.data.action;
             if (response.data.action == 'Edit') {
@@ -184,6 +228,8 @@ app.component('serialNumberGroupForm', {
                 $scope.showCategoryinSegmentTab(self.serial_number_group.category_id);
                 $scope.showFinanceYear(self.serial_number_group.fy_id);
                 $scope.showBranchCode(self.serial_number_group.branch_id);
+                $scope.showBusinessCode(self.serial_number_group.business_id);
+                $scope.showSBUCode(self.serial_number_group.sbu_id);
                 $scope.onSelectedState(self.serial_number_group.state_id);
                 $.each(self.serial_number_group.segments, function(index, value) {
                     $scope.getSegmentgroupSegment(value.id, index);
@@ -325,6 +371,7 @@ app.component('serialNumberGroupForm', {
                 self.branch_list = response.data.branch_list;
             });
         }
+
         //ADD SEGMENT
         $scope.add_group = function() {
             self.serial_number_group.segments.push({});

@@ -39,20 +39,6 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
-                                                <label>Type <sup class="mandatory">*</sup></label>
-                                                <md-select ng-model="$ctrl.serial_number_group.category_id" placeholder="Select Category" data-md-container-class="selectdemoSelectHeader" ng-change="showCategoryinSegmentTab($ctrl.serial_number_group.category_id)">
-                                                    <md-select-header class="demo-select-header ng-hide">
-                                                        <input ng-model="searchCategory" type="search" placeholder="Search for a Category" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
-                                                    </md-select-header>
-                                                    <md-optgroup label="Travel List">
-                                                        <md-option ng-value="category.id" ng-repeat="category in $ctrl.category_list | filter:searchTravel">{{category.name}}</md-option>
-                                                    </md-optgroup>
-                                                </md-select>
-                                                <input type="hidden" name="category_id" value='{{$ctrl.serial_number_group.category_id}}' class="required">
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
                                                 <label>Financial Year</label>
                                                 <md-select ng-model="$ctrl.serial_number_group.fy_id" placeholder="Select Financial Year" data-md-container-class="selectdemoSelectHeader" ng-change="showFinanceYear($ctrl.serial_number_group.fy_id)">
                                                     <md-select-header class="demo-select-header ng-hide">
@@ -81,6 +67,34 @@
                                         </div><!-- Column -->
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
+                                                <label>Business</label>
+                                                <md-select ng-model="$ctrl.serial_number_group.business_id" placeholder="Select Business" data-md-container-class="selectdemoSelectHeader" ng-change="showSBUCode($ctrl.serial_number_group.business_id);$ctrl.serial_number_group.sbu_id=''">
+                                                    <md-select-header class="demo-select-header ng-hide">
+                                                        <input ng-model="searchType" type="search" placeholder="Search for a Business" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                    </md-select-header>
+                                                    <md-optgroup label="Business List">
+                                                        <md-option ng-value="business.id" ng-repeat="business in $ctrl.business_list | filter:searchTravel">{{business.name}}</md-option>
+                                                    </md-optgroup>
+                                                </md-select>
+                                                <input type="hidden" name="business_id" value='{{$ctrl.serial_number_group.business_id}}' class="">
+                                            </div><!-- Feild -->
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>SBU</label>
+                                                <md-select ng-model="$ctrl.serial_number_group.sbu_id" placeholder="Select SBU" data-md-container-class="selectdemoSelectHeader" ng-change="showSBUCode($ctrl.serial_number_group.sbu_id)">
+                                                    <md-select-header class="demo-select-header ng-hide">
+                                                        <input ng-model="searchType" type="search" placeholder="Search for a SBU" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                    </md-select-header>
+                                                    <md-optgroup label="SBU List">
+                                                        <md-option ng-value="sbu.id" ng-repeat="sbu in $ctrl.sbu_list | filter:searchTravel">{{sbu.name}}</md-option>
+                                                    </md-optgroup>
+                                                </md-select>
+                                                <input type="hidden" name="sbu_id" value='{{$ctrl.serial_number_group.sbu_id}}' class="">
+                                            </div><!-- Feild -->
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
                                                 <label>Branch</label>
                                                 <md-select ng-model="$ctrl.serial_number_group.branch_id" placeholder="Select Branch" data-md-container-class="selectdemoSelectHeader" ng-change="showBranchCode($ctrl.serial_number_group.branch_id)">
                                                     <md-select-header class="demo-select-header ng-hide">
@@ -91,6 +105,20 @@
                                                     </md-optgroup>
                                                 </md-select>
                                                 <input type="hidden" name="branch_id" value='{{$ctrl.serial_number_group.branch_id}}' class="">
+                                            </div><!-- Feild -->
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>Type <sup class="mandatory">*</sup></label>
+                                                <md-select ng-model="$ctrl.serial_number_group.category_id" placeholder="Select Category" data-md-container-class="selectdemoSelectHeader" ng-change="showCategoryinSegmentTab($ctrl.serial_number_group.category_id)">
+                                                    <md-select-header class="demo-select-header ng-hide">
+                                                        <input ng-model="searchCategory" type="search" placeholder="Search for a Category" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                    </md-select-header>
+                                                    <md-optgroup label="Travel List">
+                                                        <md-option ng-value="category.id" ng-repeat="category in $ctrl.category_list | filter:searchTravel">{{category.name}}</md-option>
+                                                    </md-optgroup>
+                                                </md-select>
+                                                <input type="hidden" name="category_id" value='{{$ctrl.serial_number_group.category_id}}' class="required">
                                             </div><!-- Feild -->
                                         </div><!-- Column -->
                                         <div class="col-md-3">
