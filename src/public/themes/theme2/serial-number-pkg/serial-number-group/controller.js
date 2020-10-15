@@ -228,8 +228,6 @@ app.component('serialNumberGroupForm', {
                 $scope.showCategoryinSegmentTab(self.serial_number_group.category_id);
                 $scope.showFinanceYear(self.serial_number_group.fy_id);
                 $scope.showBranchCode(self.serial_number_group.branch_id);
-                $scope.showBusinessCode(self.serial_number_group.business_id);
-                $scope.showSBUCode(self.serial_number_group.sbu_id);
                 $scope.onSelectedState(self.serial_number_group.state_id);
                 $.each(self.serial_number_group.segments, function(index, value) {
                     $scope.getSegmentgroupSegment(value.id, index);
