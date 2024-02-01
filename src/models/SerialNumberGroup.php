@@ -101,7 +101,7 @@ class SerialNumberGroup extends Model {
 		return $record;
 	}
 
-	public static function generateNumber($category_id, $fy_id = NULL, $state_id = NULL, $branch_id = NULL, $sbu = NULL, $business_id = NULL) {
+	public static function generateNumber($category_id, $fy_id = NULL, $state_id = NULL, $branch_id = NULL, $sbu = NULL, $business_id = NULL, $company_id = NULL) {
 		// dd($category_id, $fy_id, $state_id, $branch_id, $sbu, $business_id);
 		try {
 			$response = array();
@@ -174,6 +174,10 @@ class SerialNumberGroup extends Model {
 				$serial_number_group->where('business_id', $business_id);
 			}
 			//END
+			// Added Company Validation
+			if ($company_id) {
+				$serial_number_group->where('company_id', $company_id);
+			}
 			$serial_number_group = $serial_number_group
 				->first();
 			if (!$serial_number_group) {
